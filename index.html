@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -98,76 +96,17 @@
     margin-bottom: var(--spacing-md);
   }
 
-  #visualizer-container {
-    position: relative;
+  /* Контейнер для плеєра */
+  #player-container {
     margin: var(--spacing-lg) auto;
     width: 100%;
     max-width: 800px;
-    height: 300px;
     background-color: rgba(0,0,0,0.8);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
   }
 
-  #visualizer {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  .player-controls {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: var(--spacing-md);
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-  }
-
-  #playButton {
-    width: 60px;
-    height: 40px;
-    border: none;
-    border-radius: 20px;
-    background: linear-gradient(90deg, var(--primary-blue) 50%, var(--primary-yellow) 50%);
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-
-  #playButton:hover {
-    transform: scale(1.05);
-  }
-
-  #volumeControl {
-    flex: 1;
-    max-width: 200px;
-    -webkit-appearance: none;
-    height: 6px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 3px;
-    outline: none;
-  }
-
-  #volumeControl::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    background: var(--primary-yellow);
-    border-radius: 50%;
-    cursor: pointer;
-  }
-  
-  /* Стилі для плейлиста Spotify */
-  .spotify-section {
-    margin: var(--spacing-lg) auto;
-    width: 100%;
-    max-width: 800px;
-  }
-  
   .spotify-container {
     width: 100%;
     border-radius: 12px;
@@ -176,19 +115,6 @@
     background-color: rgba(0,0,0,0.8);
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     position: relative;
-  }
-  
-  .player-notification {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: var(--primary-yellow);
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    z-index: 10;
-    display: none;
   }
 
   .buymeacoffee {
@@ -236,7 +162,6 @@
     margin-top: auto;
   }
 
-  /* Медіа-запити для адаптивності */
   @media screen and (max-width: 768px) {
     header h1 {
       font-size: 2rem;
@@ -244,19 +169,6 @@
 
     main {
       padding: var(--spacing-md);
-    }
-
-    #visualizer-container {
-      height: 200px;
-    }
-
-    .player-controls {
-      padding: var(--spacing-sm);
-    }
-
-    #playButton {
-      width: 50px;
-      height: 35px;
     }
 
     .scrolling-banner {
@@ -277,10 +189,6 @@
     nav ul {
       flex-direction: column;
       gap: var(--spacing-sm);
-    }
-
-    #visualizer-container {
-      height: 150px;
     }
   }
 </style>
@@ -303,39 +211,27 @@
 <main>
     <section id="player">
         <h2>Радіо онлайн</h2>
-        <div id="visualizer-container">
-            <canvas id="visualizer"></canvas>
-            <div class="player-controls">
-                <button id="playButton" aria-label="Відтворити/Зупинити"></button>
-                <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" aria-label="Гучність">
-            </div>
-            <div class="player-notification" id="radio-notification">Spotify плейлист зупинено</div>
+        <div id="player-container">
+          <!-- Офіційний плеєр Caster.fm -->
+          <iframe
+            src="https://cloud.caster.fm/player/a05d410a-df79-44cc-8f2e-5f8df938ebaf"
+            width="100%"
+            height="150"
+            frameborder="0"
+            scrolling="no"
+            allow="autoplay"
+          ></iframe>
         </div>
-  <audio id="audio" preload="none">
-    <source src="http://morcast.caster.fm:11708/y1Nor" type="audio/mpeg">
-    Ваш браузер не підтримує аудіо елемент.
-  </audio>
-
-      <div style="max-width:800px;margin:1rem auto;">
-  <iframe
-    src="https://cloud.caster.fm/player/a05d410a-df79-44cc-8f2e-5f8df938ebaf"
-    width="100%"
-    height="150"
-    frameborder="0"
-    scrolling="no"
-    allow="autoplay"
-  ></iframe>
-</div>
-
-      
     </section>
     
-    <!-- Розділ зі Spotify плейлистом -->
     <section id="spotify">
         <h2>Наш плейлист</h2>
         <div class="spotify-container">
-            <div class="player-notification" id="spotify-notification">Радіо зупинено</div>
-            <iframe id="spotify-player" data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2XRW5O4vfR3hwafhcj3evx?utm_source=generator" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            <iframe id="spotify-player" style="border-radius:12px"
+                src="https://open.spotify.com/embed/playlist/2XRW5O4vfR3hwafhcj3evx?utm_source=generator"
+                width="100%" height="352" frameborder="0" allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"></iframe>
         </div>
     </section>
 
@@ -355,236 +251,5 @@
 <footer>
     <p>&copy; 2024 Хвиля Перемоги. Слава Україні!</p>
 </footer>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const audio = document.getElementById('audio');
-    const playButton = document.getElementById('playButton');
-    const volumeControl = document.getElementById('volumeControl');
-    const canvas = document.getElementById('visualizer');
-    const ctx = canvas.getContext('2d');
-    const spotifyPlayer = document.getElementById('spotify-player');
-    const radioNotification = document.getElementById('radio-notification');
-    const spotifyNotification = document.getElementById('spotify-notification');
-
-    let audioContext;
-    let analyser;
-    let source;
-    let dataArray;
-    let bufferLength;
-    let isPlaying = false;
-    let spotifyIsPlaying = false;
-
-    // Встановлюємо розміри canvas відповідно до розміру контейнера
-    function resizeCanvas() {
-        const container = canvas.parentElement;
-        canvas.width = container.clientWidth;
-        canvas.height = container.clientHeight;
-    }
-
-    // Ініціалізація аудіо контексту
-    async function setupAudioContext() {
-        try {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioContext.createAnalyser();
-            source = audioContext.createMediaElementSource(audio);
-            
-            // Налаштування аналізатора
-            analyser.fftSize = 256;
-            analyser.smoothingTimeConstant = 0.8;
-            
-            source.connect(analyser);
-            analyser.connect(audioContext.destination);
-            
-            bufferLength = analyser.frequencyBinCount;
-            dataArray = new Uint8Array(bufferLength);
-            
-            return true;
-        } catch (error) {
-            console.error('Помилка ініціалізації аудіо:', error);
-            return false;
-        }
-    }
-
-    // Функція візуалізації
-    function visualize() {
-        if (!ctx || !analyser) return;
-
-        function draw() {
-            if (!isPlaying) return;
-
-            requestAnimationFrame(draw);
-            analyser.getByteFrequencyData(dataArray);
-
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            const barWidth = (canvas.width / bufferLength) * 2.5;
-            let x = 0;
-
-            for (let i = 0; i < bufferLength; i++) {
-                const barHeight = (dataArray[i] / 255) * canvas.height;
-
-                // Створюємо градієнт для кожного бару
-                const gradient = ctx.createLinearGradient(0, canvas.height - barHeight, 0, canvas.height);
-                gradient.addColorStop(0, '#0057b7');
-                gradient.addColorStop(1, '#ffd700');
-
-                ctx.fillStyle = gradient;
-                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-                x += barWidth + 1;
-            }
-        }
-
-        draw();
-    }
-
-    // Обробник кліку по кнопці відтворення радіо
-    async function togglePlay() {
-        try {
-            if (!audioContext) {
-                const setup = await setupAudioContext();
-                if (!setup) return;
-            }
-
-            if (audio.paused) {
-                // Якщо Spotify відтворюється, зупинімо його
-                if (spotifyIsPlaying) {
-                    pauseSpotify();
-                    spotifyNotification.style.display = 'block';
-                    spotifyNotification.textContent = 'Радіо увімкнено - плейлист зупинено';
-                    setTimeout(() => {
-                        spotifyNotification.style.display = 'none';
-                    }, 3000);
-                }
-                
-                await audio.play();
-                isPlaying = true;
-                playButton.style.background = 'linear-gradient(90deg, #ffd700 50%, #0057b7 50%)';
-                visualize();
-            } else {
-                audio.pause();
-                isPlaying = false;
-                playButton.style.background = 'linear-gradient(90deg, #0057b7 50%, #ffd700 50%)';
-            }
-        } catch (error) {
-            console.error('Помилка відтворення:', error);
-            alert('Помилка відтворення аудіо. Будь ласка, спробуйте пізніше.');
-        }
-    }
-
-    // Функція для зупинки Spotify плеєра
-    function pauseSpotify() {
-        // Перезавантаження iframe для зупинки відтворення
-        const src = spotifyPlayer.src;
-        spotifyPlayer.src = '';
-        setTimeout(() => {
-            spotifyPlayer.src = src;
-            spotifyIsPlaying = false;
-        }, 100);
-    }
-
-    // Функція для відстеження кліків на Spotify плеєрі
-    function setupSpotifyPlaybackMonitoring() {
-        // Слухаємо повідомлення від iframe
-        window.addEventListener('message', (event) => {
-            if (event.data && typeof event.data === 'object' && event.data.type === 'playback_update') {
-                // Якщо Spotify почав відтворення
-                if (event.data.payload && event.data.payload.isPaused === false) {
-                    spotifyIsPlaying = true;
-                    // Якщо радіо грає, зупиняємо його
-                    if (isPlaying) {
-                        audio.pause();
-                        isPlaying = false;
-                        playButton.style.background = 'linear-gradient(90deg, #0057b7 50%, #ffd700 50%)';
-                        radioNotification.style.display = 'block';
-                        radioNotification.textContent = 'Плейлист увімкнено - радіо зупинено';
-                        setTimeout(() => {
-                            radioNotification.style.display = 'none';
-                        }, 3000);
-                    }
-                } else if (event.data.payload && event.data.payload.isPaused === true) {
-                    spotifyIsPlaying = false;
-                }
-            }
-        });
-        
-        // Додаємо слухача кліків на iframe Spotify
-        spotifyPlayer.addEventListener('load', () => {
-            spotifyPlayer.contentWindow.addEventListener('click', (e) => {
-                // Перевіряємо, чи це клік на кнопці відтворення
-                if (e.target && (
-                    e.target.classList.contains('play-button') || 
-                    e.target.closest('.play-button')
-                )) {
-                    if (isPlaying) {
-                        audio.pause();
-                        isPlaying = false;
-                        playButton.style.background = 'linear-gradient(90deg, #0057b7 50%, #ffd700 50%)';
-                    }
-                }
-            });
-        });
-    }
-    
-    // Альтернативний підхід до виявлення відтворення Spotify
-    // Оскільки Spotify iframe не дозволяє прямий доступ до подій відтворення,
-    // можемо додати обробник кліків на сам iframe
-    spotifyPlayer.addEventListener('click', () => {
-        // Встановлюємо таймаут, щоб дати час на відтворення після кліку
-        setTimeout(() => {
-            // Якщо радіо грає і був клік на плейлисті, ймовірно почалося відтворення
-            if (isPlaying) {
-                audio.pause();
-                isPlaying = false;
-                playButton.style.background = 'linear-gradient(90deg, #0057b7 50%, #ffd700 50%)';
-                radioNotification.style.display = 'block';
-                radioNotification.textContent = 'Плейлист увімкнено - радіо зупинено';
-                setTimeout(() => {
-                    radioNotification.style.display = 'none';
-                }, 3000);
-            }
-            spotifyIsPlaying = true;
-        }, 300);
-    });
-
-    // Обробники подій
-    playButton.addEventListener('click', togglePlay);
-    volumeControl.addEventListener('input', () => audio.volume = volumeControl.value);
-    window.addEventListener('resize', resizeCanvas);
-
-    // Ініціалізація розміру canvas
-    resizeCanvas();
-
-    // Намагаємось відстежувати стан відтворення Spotify
-    try {
-        setupSpotifyPlaybackMonitoring();
-    } catch (err) {
-        console.warn('Не вдалося встановити моніторинг Spotify:', err);
-    }
-
-    // Обробка помилок відтворення
-    audio.addEventListener('error', (e) => {
-        console.error('Помилка аудіо:', e);
-        alert('Помилка завантаження аудіо. Перевірте підключення до інтернету.');
-    });
-
-    // Автоматичне відновлення відтворення при втраті з'єднання
-    audio.addEventListener('ended', async () => {
-        if (isPlaying) {
-            try {
-                await audio.play();
-            } catch (error) {
-                console.error('Помилка відновлення відтворення:', error);
-            }
-        }
-    });
-});
-</script>
 </body>
 </html>
-
-
-
-
