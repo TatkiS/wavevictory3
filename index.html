@@ -1,574 +1,249 @@
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0057B8">
-<title>Хвиля Перемоги</title>
-<style>
-  :root {
-    --primary-blue: #0057B8;
-    --primary-yellow: #FFD700;
-    --text-light: #ffffff;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 2rem;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Хвиля Перемоги | Українське радіо</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
 
-  html {
-    scroll-behavior: smooth;
-  }
+        .container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #000;
-    color: var(--text-light);
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+        .logo {
+            font-size: 8vw;
+            text-align: center;
+            margin: 4vw 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            color: #ffd700;
+        }
 
-  header {
-    background: linear-gradient(135deg, var(--primary-blue), #003875);
-    padding: var(--spacing-lg);
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
+        .player-container {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            padding: 0; /* Змінено відступи */
+            background: transparent !important; /* Видалено фон */
+            backdrop-filter: none !important; /* Видалено блюр */
+            width: 100%;
+            max-width: 500px;
+        }
 
-  header h1 {
-    font-size: 2.5rem;
-    margin-bottom: var(--spacing-md);
-    animation: colorChange 10s infinite;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  }
+        .vinyl-btn {
+            width: 50vw;
+            height: 50vw;
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #2a2a2a 0%, #000 70%);
+            border: 3px solid #ffd700;
+            cursor: pointer;
+            position: relative;
+            margin: 4vw auto;
+            transition: transform 0.3s;
+            box-shadow: 0 0 30px rgba(255,215,0,0.3); /* Додано світіння */
+        }
 
-  @keyframes colorChange {
-    0% { color: #ff2d55; }
-    33% { color: var(--text-light); }
-    66% { color: #4cd964; }
-    100% { color: #ff2d55; }
-  }
+        .vinyl-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12%;
+            height: 12%;
+            background: #ffd700;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
 
-  nav ul {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: var(--spacing-md);
-    padding: 0;
-    list-style: none;
-  }
+        .vinyl-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.4); /* Зроблено напівпрозорим */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5vw;
+            text-align: center;
+            padding: 5%;
+            color: #ffd700;
+        }
 
-  nav ul li a {
-    color: var(--text-light);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-  }
+        #visualizer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
 
-  nav ul li a:hover {
-    background-color: rgba(255,255,255,0.1);
-  }
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2vw;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+            z-index: 4;
+        }
 
-  main {
-    flex: 1;
-    padding: var(--spacing-lg);
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-  }
+        .btn {
+            padding: 3vw 6vw;
+            border-radius: 30px;
+            background: rgba(0,0,0,0.3) !important; /* Прозоріший фон */
+            border: 1px solid #ffd700;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-size: 4vw;
+            flex: 1 1 auto;
+            min-width: 120px;
+            backdrop-filter: blur(3px); /* Додано легкий блюр */
+        }
 
-  section {
-    margin-bottom: var(--spacing-lg);
-  }
-
-  h2 {
-    color: var(--primary-yellow);
-    margin-bottom: var(--spacing-md);
-  }
-
-  #visualizer-container {
-    position: relative;
-    margin: var(--spacing-lg) auto;
-    width: 100%;
-    max-width: 800px;
-    height: 300px;
-    background-color: rgba(0,0,0,0.8);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
-
-  #visualizer {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  .player-controls {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: var(--spacing-md);
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-  }
-
-  #playButton {
-    width: 60px;
-    height: 40px;
-    border: none;
-    border-radius: 20px;
-    background: linear-gradient(90deg, var(--primary-blue) 50%, var(--primary-yellow) 50%);
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-
-  #playButton:hover {
-    transform: scale(1.05);
-  }
-
-  #volumeControl {
-    flex: 1;
-    max-width: 200px;
-    -webkit-appearance: none;
-    height: 6px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 3px;
-    outline: none;
-  }
-
-  #volumeControl::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    background: var(--primary-yellow);
-    border-radius: 50%;
-    cursor: pointer;
-  }
-  
-  /* Стилі для плейлиста Spotify */
-  .spotify-section {
-    margin: var(--spacing-lg) auto;
-    width: 100%;
-    max-width: 800px;
-  }
-  
-  .spotify-container {
-    width: 100%;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-top: var(--spacing-md);
-    background-color: rgba(0,0,0,0.8);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    position: relative;
-  }
-  
-  .player-notification {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: var(--primary-yellow);
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    z-index: 10;
-    display: none;
-  }
-
-  .buymeacoffee {
-    display: inline-block;
-    padding: 12px 24px;
-    background: var(--primary-yellow);
-    color: #000;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-    text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
-    margin: var(--spacing-md) 0;
-  }
-
-  .buymeacoffee:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
-
-  .scrolling-banner {
-    background: linear-gradient(90deg, var(--primary-blue), var(--primary-yellow));
-    padding: var(--spacing-sm);
-    overflow: hidden;
-    position: relative;
-  }
-
-  .scrolling-banner::before {
-    content: 'СЛАВА УКРАЇНІ! ГЕРОЯМ СЛАВА! ВСЕ БУДЕ УКРАЇНА! УКРАЇНА ПОНАД УСЕ! НА РАДІО ХВИЛЯ ПЕРЕМОГИ НЕМАЄ РЕКЛАМИ! ПІДТРИМАТИ НАС МОЖНА НАЖАВ НА КНОПКУ *НА КАВУ* ДЯКУЄМО!';
-    display: inline-block;
-    white-space: nowrap;
-    animation: scroll-banner 30s linear infinite;
-  }
-
-  @keyframes scroll-banner {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-  }
-
-  footer {
-    background: var(--primary-yellow);
-    color: #000;
-    text-align: center;
-    padding: var(--spacing-lg);
-    margin-top: auto;
-  }
-
-  /* Медіа-запити для адаптивності */
-  @media screen and (max-width: 768px) {
-    header h1 {
-      font-size: 2rem;
-    }
-
-    main {
-      padding: var(--spacing-md);
-    }
-
-    #visualizer-container {
-      height: 200px;
-    }
-
-    .player-controls {
-      padding: var(--spacing-sm);
-    }
-
-    #playButton {
-      width: 50px;
-      height: 35px;
-    }
-
-    .scrolling-banner {
-      font-size: 14px;
-    }
-
-    .buymeacoffee {
-      width: 100%;
-      padding: 10px 20px;
-    }
-  }
-
-  @media screen and (max-width: 480px) {
-    header h1 {
-      font-size: 1.75rem;
-    }
-
-    nav ul {
-      flex-direction: column;
-      gap: var(--spacing-sm);
-    }
-
-    #visualizer-container {
-      height: 150px;
-    }
-  }
-</style>
+        @media (min-width: 768px) {
+            .logo { font-size: 40px; }
+            .btn { font-size: 16px; padding: 12px 24px; }
+            .vinyl-label { font-size: 16px; }
+        }
+    </style>
 </head>
 <body>
-<div class="scrolling-banner"></div>
-
-<header>
-    <h1>Хвиля Перемоги</h1>
-    <nav>
-        <ul>
-            <li><a href="#about">Про нас</a></li>
-            <li><a href="#player">Радіо</a></li>
-            <li><a href="#spotify">Плейлист</a></li>
-            <li><a href="#contact">Контакти</a></li>
-        </ul>
-    </nav>
-</header>
-
-<main>
-    <section id="player">
-        <h2>Радіо онлайн</h2>
-        <div id="visualizer-container">
-            <canvas id="visualizer"></canvas>
-            <div class="player-controls">
-                <button id="playButton" aria-label="Відтворити/Зупинити"></button>
-                <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" aria-label="Гучність">
-            </div>
-            <div class="player-notification" id="radio-notification">Spotify плейлист зупинено</div>
-        </div>
-        <audio id="audio" crossorigin="anonymous" preload="none">
-            <source src="https://stream.zeno.fm/9cu5cnlqnlptv" type="audio/mpeg">
-            Ваш браузер не підтримує аудіо елемент.
-        </audio>
-    </section>
+    <canvas id="visualizer"></canvas>
     
-    <!-- Розділ зі Spotify плейлистом -->
-    <section id="spotify">
-        <h2>Наш плейлист</h2>
-        <div class="spotify-container">
-            <div class="player-notification" id="spotify-notification">Радіо зупинено</div>
-            <iframe id="spotify-player" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2XRW5O4vfR3hwafhcj3evx?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <div class="container">
+        <h1 class="logo">Хвиля Перемоги</h1>
+        
+        <div class="player-container">
+            <div class="vinyl-btn" id="playBtn">
+                <div class="vinyl-label"><br><br></div>
+            </div>
+            <audio id="radioPlayer" crossorigin="anonymous">
+                <source src="https://stream.zeno.fm/9cu5cnlqnlptv" type="audio/mpeg">
+            </audio>
+            <div class="buttons">
+                <a href="https://bit.ly/3APXqaS" class="btn">Підтримати</a>
+                <a href="mailto:wavevictory@protonmail.com" class="btn">Контакти</a>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <section id="about">
-        <h2>Про нас</h2>
-        <p>"Хвиля Перемоги" – це радіо, де українська сучасна музика відіграє ключову роль, об'єднуючи жанри та культури.</p>
-    </section>
+    <script>
+        const audio = document.getElementById('radioPlayer');
+        const canvas = document.getElementById('visualizer');
+        const ctx = canvas.getContext('2d');
+        const playBtn = document.getElementById('playBtn');
+        let audioContext, analyser, source;
+        let isPlaying = false;
 
-    <section id="contact">
-        <h2>Контакти</h2>
-        <p>Для звернень: <a href="mailto:wavevictory@protonmail.com">wavevictory@protonmail.com</a></p>
-    </section>
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
 
-    <a href="https://bit.ly/3APXqaS" target="_blank" rel="noopener" class="buymeacoffee">НА КАВУ</a>
-</main>
-
-<footer>
-    <p>&copy; 2024 Хвиля Перемоги. Слава Україні!</p>
-</footer>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const audio = document.getElementById('audio');
-    const playButton = document.getElementById('playButton');
-    const volumeControl = document.getElementById('volumeControl');
-    const canvas = document.getElementById('visualizer');
-    const ctx = canvas.getContext('2d');
-    const spotifyPlayer = document.getElementById('spotify-player');
-    const radioNotification = document.getElementById('radio-notification');
-    const spotifyNotification = document.getElementById('spotify-notification');
-
-    let audioContext;
-    let analyser;
-    let source;
-    let dataArray;
-    let bufferLength;
-    let isPlaying = false;
-    let spotifyIsPlaying = false;
-
-    // Встановлюємо розміри canvas відповідно до розміру контейнера
-    function resizeCanvas() {
-        const container = canvas.parentElement;
-        canvas.width = container.clientWidth;
-        canvas.height = container.clientHeight;
-    }
-
-    // Ініціалізація аудіо контексту
-    async function setupAudioContext() {
-        try {
+        async function initAudio() {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            await audioContext.resume();
+            
             analyser = audioContext.createAnalyser();
             source = audioContext.createMediaElementSource(audio);
-            
-            // Налаштування аналізатора
-            analyser.fftSize = 256;
-            analyser.smoothingTimeConstant = 0.8;
             
             source.connect(analyser);
             analyser.connect(audioContext.destination);
             
-            bufferLength = analyser.frequencyBinCount;
-            dataArray = new Uint8Array(bufferLength);
-            
-            return true;
-        } catch (error) {
-            console.error('Помилка ініціалізації аудіо:', error);
-            return false;
-        }
-    }
+            analyser.fftSize = 1024;
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
 
-    // Функція візуалізації
-    function visualize() {
-        if (!ctx || !analyser) return;
+            function visualize() {
+                requestAnimationFrame(visualize);
+                analyser.getByteFrequencyData(dataArray);
 
-        function draw() {
-            if (!isPlaying) return;
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            requestAnimationFrame(draw);
-            analyser.getByteFrequencyData(dataArray);
-
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            const barWidth = (canvas.width / bufferLength) * 2.5;
-            let x = 0;
-
-            for (let i = 0; i < bufferLength; i++) {
-                const barHeight = (dataArray[i] / 255) * canvas.height;
-
-                // Створюємо градієнт для кожного бару
-                const gradient = ctx.createLinearGradient(0, canvas.height - barHeight, 0, canvas.height);
-                gradient.addColorStop(0, '#0057b7');
-                gradient.addColorStop(1, '#ffd700');
-
-                ctx.fillStyle = gradient;
-                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-                x += barWidth + 1;
-            }
-        }
-
-        draw();
-    }
-
-    // Обробник кліку по кнопці відтворення радіо
-    async function togglePlay() {
-        try {
-            if (!audioContext) {
-                const setup = await setupAudioContext();
-                if (!setup) return;
-            }
-
-            if (audio.paused) {
-                // Якщо Spotify відтворюється, зупинімо його
-                if (spotifyIsPlaying) {
-                    pauseSpotify();
-                    spotifyNotification.style.display = 'block';
-                    spotifyNotification.textContent = 'Радіо увімкнено - плейлист зупинено';
-                    setTimeout(() => {
-                        spotifyNotification.style.display = 'none';
-                    }, 3000);
-                }
+                // Новий ефект візуалізації
+                const centerX = canvas.width/2;
+                const centerY = canvas.height/2;
                 
-                await audio.play();
-                isPlaying = true;
-                playButton.style.background = 'linear-gradient(90deg, #ffd700 50%, #0057b7 50%)';
-                visualize();
+                for(let i = 0; i < bufferLength; i++) {
+                    const angle = (Math.PI * 2 * i) / bufferLength;
+                    const value = dataArray[i];
+                    
+                    const x = centerX + Math.cos(angle) * (value + 50);
+                    const y = centerY + Math.sin(angle) * (value + 50);
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, 2, 0, Math.PI*2);
+                    ctx.fillStyle = `hsla(${value * 2}, 70%, 50%, 0.5)`;
+                    ctx.fill();
+                }
+            }
+            visualize();
+        }
+
+        playBtn.addEventListener('click', async () => {
+            if(!isPlaying) {
+                try {
+                    await audio.play();
+                    if(!audioContext) await initAudio();
+                    isPlaying = true;
+                    playBtn.style.animation = 'rotate 20s linear infinite';
+                } catch(e) {
+                    console.error('Помилка відтворення:', e);
+                }
             } else {
                 audio.pause();
                 isPlaying = false;
-                playButton.style.background = 'linear-gradient(90deg, #0057b7 50%, #ffd700 50%)';
-            }
-        } catch (error) {
-            console.error('Помилка відтворення:', error);
-            alert('Помилка відтворення аудіо. Будь ласка, спробуйте пізніше.');
-        }
-    }
-
-    // Функція для зупинки Spotify плеєра
-    function pauseSpotify() {
-        // Перезавантаження iframe для зупинки відтворення
-        const src = spotifyPlayer.src;
-        spotifyPlayer.src = '';
-        setTimeout(() => {
-            spotifyPlayer.src = src;
-            spotifyIsPlaying = false;
-        }, 100);
-    }
-
-    // Функція для відстеження кліків на Spotify плеєрі
-    function setupSpotifyPlaybackMonitoring() {
-        // Слухаємо повідомлення від iframe
-        window.addEventListener('message', (event) => {
-            if (event.data && typeof event.data === 'object' && event.data.type === 'playback_update') {
-                // Якщо Spotify почав відтворення
-                if (event.data.payload && event.data.payload.isPaused === false) {
-                    spotifyIsPlaying = true;
-                    // Якщо радіо грає, зупиняємо його
-                    if (isPlaying) {
-                        audio.pause();
-                        isPlaying = false;
-                        playButton.style.background = 'linear-gradient(90deg, #0057b7 50%, #ffd700 50%)';
-                        radioNotification.style.display = 'block';
-                        radioNotification.textContent = 'Плейлист увімкнено - радіо зупинено';
-                        setTimeout(() => {
-                            radioNotification.style.display = 'none';
-                        }, 3000);
-                    }
-                } else if (event.data.payload && event.data.payload.isPaused === true) {
-                    spotifyIsPlaying = false;
-                }
+                playBtn.style.animation = 'none';
             }
         });
-        
-        // Додаємо слухача кліків на iframe Spotify
-        spotifyPlayer.addEventListener('load', () => {
-            spotifyPlayer.contentWindow.addEventListener('click', (e) => {
-                // Перевіряємо, чи це клік на кнопці відтворення
-                if (e.target && (
-                    e.target.classList.contains('play-button') || 
-                    e.target.closest('.play-button')
-                )) {
-                    if (isPlaying) {
-                        audio.pause();
-                        isPlaying = false;
-                        playButton.style.background = 'linear-gradient(90deg, #0057b7 50%, #ffd700 50%)';
-                    }
-                }
-            });
-        });
-    }
-    
-    // Альтернативний підхід до виявлення відтворення Spotify
-    // Оскільки Spotify iframe не дозволяє прямий доступ до подій відтворення,
-    // можемо додати обробник кліків на сам iframe
-    spotifyPlayer.addEventListener('click', () => {
-        // Встановлюємо таймаут, щоб дати час на відтворення після кліку
-        setTimeout(() => {
-            // Якщо радіо грає і був клік на плейлисті, ймовірно почалося відтворення
-            if (isPlaying) {
-                audio.pause();
-                isPlaying = false;
-                playButton.style.background = 'linear-gradient(90deg, #0057b7 50%, #ffd700 50%)';
-                radioNotification.style.display = 'block';
-                radioNotification.textContent = 'Плейлист увімкнено - радіо зупинено';
-                setTimeout(() => {
-                    radioNotification.style.display = 'none';
-                }, 3000);
-            }
-            spotifyIsPlaying = true;
-        }, 300);
-    });
 
-    // Обробники подій
-    playButton.addEventListener('click', togglePlay);
-    volumeControl.addEventListener('input', () => audio.volume = volumeControl.value);
-    window.addEventListener('resize', resizeCanvas);
+        playBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            playBtn.click();
+        }, {passive: false});
 
-    // Ініціалізація розміру canvas
-    resizeCanvas();
+        window.addEventListener('click', () => {
+            if(!isPlaying) playBtn.click();
+        }, {once: true});
 
-    // Намагаємось відстежувати стан відтворення Spotify
-    try {
-        setupSpotifyPlaybackMonitoring();
-    } catch (err) {
-        console.warn('Не вдалося встановити моніторинг Spotify:', err);
-    }
-
-    // Обробка помилок відтворення
-    audio.addEventListener('error', (e) => {
-        console.error('Помилка аудіо:', e);
-        alert('Помилка завантаження аудіо. Перевірте підключення до інтернету.');
-    });
-
-    // Автоматичне відновлення відтворення при втраті з'єднання
-    audio.addEventListener('ended', async () => {
-        if (isPlaying) {
-            try {
-                await audio.play();
-            } catch (error) {
-                console.error('Помилка відновлення відтворення:', error);
-            }
-        }
-    });
-});
-</script>
+        const rotateAnimation = playBtn.animate(
+            [{transform: 'rotate(0deg)'}, {transform: 'rotate(360deg)'}],
+            {duration: 20000, iterations: Infinity}
+        );
+        rotateAnimation.pause();
+    </script>
 </body>
+
 </html>
-
-
