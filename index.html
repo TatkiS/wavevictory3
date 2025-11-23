@@ -2,8 +2,9 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Хвиля Перемоги | Українське радіо</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хвиля Перемоги - Українське Радіо</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -11,91 +12,21 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-color: #005BBB;
+            --secondary-color: #FFD500;
+        }
+
         body {
-            background: #000;
-            color: #fff;
             font-family: 'Arial', sans-serif;
-            overflow: hidden;
-            touch-action: manipulation;
-        }
-
-        .container {
-            position: relative;
-            z-index: 2;
+            line-height: 1.6;
+            color: white;
+            overflow-x: hidden;
+            background: #000;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
         }
 
-        .logo {
-            font-size: 8vw;
-            text-align: center;
-            margin: 4vw 0;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            color: #ffd700;
-        }
-
-        .player-container {
-            position: relative;
-            z-index: 3;
-            text-align: center;
-            padding: 0; /* Змінено відступи */
-            background: transparent !important; /* Видалено фон */
-            backdrop-filter: none !important; /* Видалено блюр */
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .vinyl-btn {
-            width: 50vw;
-            height: 50vw;
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #2a2a2a 0%, #000 70%);
-            border: 3px solid #ffd700;
-            cursor: pointer;
-            position: relative;
-            margin: 4vw auto;
-            transition: transform 0.3s;
-            box-shadow: 0 0 30px rgba(255,215,0,0.3); /* Додано світіння */
-        }
-
-        .vinyl-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 12%;
-            height: 12%;
-            background: #ffd700;
-            border-radius: 50%;
-            border: 2px solid #fff;
-        }
-
-        .vinyl-label {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60%;
-            height: 60%;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.4); /* Зроблено напівпрозорим */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3.5vw;
-            text-align: center;
-            padding: 5%;
-            color: #ffd700;
-        }
-
-        #visualizer {
+        #visualization-background {
             position: fixed;
             top: 0;
             left: 0;
@@ -104,146 +35,341 @@
             z-index: 1;
         }
 
-        .buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2vw;
-            justify-content: center;
-            margin-top: 20px;
+        .content-wrapper {
             position: relative;
-            z-index: 4;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.5);
+            min-height: 100vh;
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
         }
 
-        .btn {
-            padding: 3vw 6vw;
-            border-radius: 30px;
-            background: rgba(0,0,0,0.3) !important; /* Прозоріший фон */
-            border: 1px solid #ffd700;
-            color: #fff;
+        header {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .logo {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 91, 187, 0.8);
+        }
+
+        .container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            width: 100%;
+        }
+
+        .player-container {
+            text-align: center;
+            margin: 1rem auto;
+            max-width: 800px;
+        }
+
+        .vinyl-player {
+            width: clamp(150px, 40vw, 200px);
+            height: clamp(150px, 40vw, 200px);
+            margin: 2rem auto;
+            position: relative;
             cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-size: 4vw;
-            flex: 1 1 auto;
-            min-width: 120px;
-            backdrop-filter: blur(3px); /* Додано легкий блюр */
         }
 
-        @media (min-width: 768px) {
-            .logo { font-size: 40px; }
-            .btn { font-size: 16px; padding: 12px 24px; }
-            .vinyl-label { font-size: 16px; }
+        .vinyl-disc {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #333 0%, #000 70%);
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 213, 0, 0.5);
+            transition: transform 0.5s ease;
+        }
+
+        .vinyl-disc::before {
+            content: '';
+            position: absolute;
+            width: 30%;
+            height: 30%;
+            background: radial-gradient(circle, var(--secondary-color) 0%, var(--primary-color) 100%);
+            border-radius: 50%;
+        }
+
+        .vinyl-disc.playing {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .description, .contact-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .description:hover, .contact-info:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 0.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(0, 91, 187, 0.5);
+            width: calc(100% - 2rem);
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .contact-button:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.05);
+            color: #000;
+        }
+
+        footer {
+            background: rgba(0, 91, 187, 0.3);
+            text-align: center;
+            padding: 1rem;
+            backdrop-filter: blur(5px);
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+            
+            .description, .contact-info {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .vinyl-player {
+                width: 150px;
+                height: 150px;
+            }
+
+            .contact-button {
+                display: block;
+                margin: 0.5rem auto;
+            }
+        }
+
+        @media (hover: none) {
+            .description:hover, .contact-info:hover {
+                transform: none;
+            }
         }
     </style>
 </head>
 <body>
-    <canvas id="visualizer"></canvas>
-    
-    <div class="container">
-        <h1 class="logo">Хвиля Перемоги</h1>
-        
-        <div class="player-container">
-            <div class="vinyl-btn" id="playBtn">
-                <div class="vinyl-label"><br><br></div>
+    <canvas id="visualization-background"></canvas>
+    <div class="content-wrapper">
+        <header>
+            <div class="logo">Хвиля Перемоги</div>
+            <p>Круглодобово Українська сучасна музика</p>
+        </header>
+
+        <div class="container">
+            <div class="player-container">
+                <h2>Слухати зараз</h2>
+                <div class="vinyl-player" onclick="togglePlay()">
+                    <div class="vinyl-disc" id="vinyl">
+                        <div class="vinyl-label">Хвиля Перемоги</div>
+                    </div>
+                </div>
+                <audio id="radio-player" src="https://stream.zeno.fm/9cu5cnlqnlptv" crossorigin="anonymous"></audio>
             </div>
-            <audio id="radioPlayer" crossorigin="anonymous">
-                <source src="https://stream.zeno.fm/9cu5cnlqnlptv" type="audio/mpeg">
-            </audio>
-            <div class="buttons">
-                <a href="https://bit.ly/3APXqaS" class="btn">Підтримати</a>
-                <a href="mailto:wavevictory@protonmail.com" class="btn">Контакти</a>
+
+            <div class="description">
+                <h2>Про нас</h2>
+                <p>"Хвиля Перемоги" – це радіо, де українська сучасна музика відіграє ключову роль, об'єднуючи жанри та культури. Круглодобово Тільки Українська сучасна музика.</p>
+            </div>
+
+            <div class="contact-info">
+                <h2>Зв'язатися з нами</h2>
+                <a href="mailto:wavevictory@protonmail.com" class="contact-button">
+                    <i class="fas fa-envelope"></i> Написати нам
+                </a>
+                <a href="https://bit.ly/3APXqaS" class="contact-button" target="_blank">
+                    </i> НА КАВУ
+                </a>
             </div>
         </div>
+
+        <footer>
+            <p>&copy; 2025 Хвиля Перемоги. Всі права захищені.</p>
+        </footer>
     </div>
 
     <script>
-        const audio = document.getElementById('radioPlayer');
-        const canvas = document.getElementById('visualizer');
+        let audioContext;
+        let analyser;
+        let source;
+        const canvas = document.getElementById('visualization-background');
         const ctx = canvas.getContext('2d');
-        const playBtn = document.getElementById('playBtn');
-        let audioContext, analyser, source;
-        let isPlaying = false;
+        let animationFrame;
+        let particles = [];
 
-        function resize() {
+        function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            initParticles();
         }
-        window.addEventListener('resize', resize);
-        resize();
 
-        async function initAudio() {
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 2;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+                this.life = 1;
+                this.color = `hsla(${Math.random() * 60 + 210}, 100%, 50%, ${this.life})`;
+            }
+
+            update(frequency) {
+                this.x += this.speedX * (frequency + 0.2);
+                this.y += this.speedY * (frequency + 0.2);
+                this.life -= 0.01;
+                this.color = `hsla(${Math.random() * 60 + 210}, 100%, 50%, ${this.life})`;
+
+                if (this.x < 0 || this.x > canvas.width || 
+                    this.y < 0 || this.y > canvas.height || 
+                    this.life <= 0) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 12000);
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function initAudio() {
+            const audio = document.getElementById('radio-player');
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            await audioContext.resume();
-            
             analyser = audioContext.createAnalyser();
             source = audioContext.createMediaElementSource(audio);
             
             source.connect(analyser);
             analyser.connect(audioContext.destination);
             
-            analyser.fftSize = 1024;
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
-
-            function visualize() {
-                requestAnimationFrame(visualize);
-                analyser.getByteFrequencyData(dataArray);
-
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                // Новий ефект візуалізації
-                const centerX = canvas.width/2;
-                const centerY = canvas.height/2;
-                
-                for(let i = 0; i < bufferLength; i++) {
-                    const angle = (Math.PI * 2 * i) / bufferLength;
-                    const value = dataArray[i];
-                    
-                    const x = centerX + Math.cos(angle) * (value + 50);
-                    const y = centerY + Math.sin(angle) * (value + 50);
-                    
-                    ctx.beginPath();
-                    ctx.arc(x, y, 2, 0, Math.PI*2);
-                    ctx.fillStyle = `hsla(${value * 2}, 70%, 50%, 0.5)`;
-                    ctx.fill();
-                }
-            }
-            visualize();
+            analyser.fftSize = 256;
+            return audio;
         }
 
-        playBtn.addEventListener('click', async () => {
-            if(!isPlaying) {
-                try {
-                    await audio.play();
-                    if(!audioContext) await initAudio();
-                    isPlaying = true;
-                    playBtn.style.animation = 'rotate 20s linear infinite';
-                } catch(e) {
-                    console.error('Помилка відтворення:', e);
-                }
+        function visualize() {
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+            
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach((particle, index) => {
+                const frequencyIndex = Math.floor(index % bufferLength);
+                const frequency = dataArray[frequencyIndex] / 255;
+                particle.update(frequency);
+                particle.draw();
+            });
+            
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height / 2);
+            
+            for (let i = 0; i < bufferLength; i++) {
+                const x = (canvas.width / bufferLength) * i;
+                const v = dataArray[i] / 128.0;
+                const y = (v * canvas.height / 4) + canvas.height / 2;
+                ctx.lineTo(x, y);
+            }
+            
+            ctx.strokeStyle = 'rgba(255, 213, 0, 0.5)';
+            ctx.stroke();
+            
+            animationFrame = requestAnimationFrame(visualize);
+        }
+
+        function togglePlay() {
+            const audio = document.getElementById('radio-player');
+            const vinyl = document.getElementById('vinyl');
+            
+            if (!audioContext) {
+                initAudio();
+                initParticles();
+            }
+            
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        vinyl.classList.add('playing');
+                        visualize();
+                    })
+                    .catch(error => console.error("Помилка відтворення:", error));
             } else {
                 audio.pause();
-                isPlaying = false;
-                playBtn.style.animation = 'none';
+                vinyl.classList.remove('playing');
+                cancelAnimationFrame(animationFrame);
             }
+        }
+
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            initParticles();
         });
 
-        playBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            playBtn.click();
-        }, {passive: false});
+        window.addEventListener('resize', resizeCanvas);
 
-        window.addEventListener('click', () => {
-            if(!isPlaying) playBtn.click();
-        }, {once: true});
-
-        const rotateAnimation = playBtn.animate(
-            [{transform: 'rotate(0deg)'}, {transform: 'rotate(360deg)'}],
-            {duration: 20000, iterations: Infinity}
-        );
-        rotateAnimation.pause();
+        const audio = document.getElementById('radio-player');
+        audio.onerror = function(error) {
+            console.error("Помилка завантаження аудіо:", error);
+        };
     </script>
 </body>
-
 </html>
