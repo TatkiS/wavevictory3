@@ -86,14 +86,21 @@
         h2 { font-size: 28px; font-weight: 800; line-height: 1.1; }
         p { font-size: 14px; color: var(--text-sec); margin-top: 8px; line-height: 1.4; }
 
-        /* --- PLAYER COMPONENT --- */
+        /* --- PLAYER COMPONENT (КЛЮЧОВІ ЗМІНИ ТУТ) --- */
         .player-wrapper {
-            /* Видалено центрування, оскільки кнопка тепер абсолютна */
-            height: 100%;
-            position: relative;
-            z-index: 2;
+            /* Батьківський контейнер, який покриває всю картку і використовує flex для центрування */
+            height: 100%; 
+            width: 100%;
+            position: absolute; /* Позиціонуємо абсолютно, щоб він покривав все, крім padding картки */
+            top: 0;
+            left: 0;
+            display: flex; 
+            justify-content: center; /* Центрує кнопку по горизонталі */
+            align-items: center; /* Центрує кнопку по вертикалі */
+            z-index: 5; /* Високий z-index, щоб кнопка була над візуалізатором */
+            pointer-events: none; /* Дозволяє клікам "проходити" на елементи під ним */
         }
-
+        
         .play-btn-circle {
             width: 100px;
             height: 100px;
@@ -105,16 +112,13 @@
             cursor: pointer;
             box-shadow: 0 0 0 0 rgba(46, 92, 255, 0.7);
             transition: all 0.3s ease;
-            /* Змінено позиціонування на абсолютне по центру */
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative; 
             z-index: 10;
+            pointer-events: auto; /* Дозволяємо клікати на кнопку */
         }
         
         .play-btn-circle svg { width: 32px; height: 32px; fill: white; transition: 0.2s; }
-        .play-btn-circle:active { transform: translate(-50%, -50%) scale(0.9); } /* Додано translate для збереження центрування при кліку */
+        .play-btn-circle:active { transform: scale(0.9); }
         
         .is-playing .play-btn-circle {
             background: #fff;
@@ -128,13 +132,31 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            /* Збільшено розмір канвасу для багатшої візуалізації */
             width: 350px;
             height: 350px;
             pointer-events: none;
             z-index: 1;
-            opacity: 0.8; /* Збільшено непрозорість */
+            opacity: 0.8; 
+            /* На мобільному можемо трохи підняти візуалізатор, щоб він візуально співпадав з центром картки */
+            /* transform: translate(-50%, -50%); - це і є ідеальний центр */
         }
+        
+        /* Текст та гучність розташовані зверху кнопки, тому мають вищий z-index */
+        .top-info {
+            position: relative;
+            z-index: 20; /* Вищий, ніж кнопка та візуалізатор */
+        }
+        
+        .bottom-controls {
+            position: absolute;
+            bottom: 24px; 
+            right: 24px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+            z-index: 20;
+        }
+
 
         /* --- STATUS INDICATOR --- */
         .live-badge {
@@ -217,7 +239,7 @@
             .area-main-player { min-height: 350px; flex: none; }
             .area-ticker { order: 10; margin-top: 20px; background: transparent; border: none; }
             h2 { font-size: 24px; }
-            /* На мобільному трохи зменшуємо кнопку і візуалізацію */
+            
             .play-btn-circle { width: 90px; height: 90px; }
             #visualizer { width: 300px; height: 300px; }
         }
@@ -228,20 +250,21 @@
     <div class="app-container">
         
         <div class="card area-main-player" id="playerCard">
+            
             <canvas id="visualizer"></canvas>
-            <div style="position: absolute; top: 24px; left: 24px; z-index: 2;">
+
+            <div class="top-info" style="position: absolute; top: 24px; left: 24px;">
                 <h1>Зараз в ефірі</h1>
                 <div style="font-size: 18px; font-weight: 600; color: #fff; max-width: 80%;">Українська Музика</div>
             </div>
-
+            
             <div class="player-wrapper">
                 <div class="play-btn-circle" id="playBtn">
                     <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     <svg id="icon-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                 </div>
             </div>
-
-            <div style="position: absolute; bottom: 24px; right: 24px; display: flex; align-items: center; gap: 10px;">
+            <div class="bottom-controls">
                 <span style="font-size: 12px; color: var(--text-sec);">ГУЧНІСТЬ</span>
                 <input type="range" id="volume" min="0" max="1" step="0.1" value="0.8" style="accent-color: var(--text-main); width: 80px;">
             </div>
@@ -331,8 +354,8 @@
                 analyser.connect(audioContext.destination);
                 
                 // Config
-                // Збільшено розмір FFT для більш детальної візуалізації
-                analyser.fftSize = 512;
+                analyser.fftSize = 1024;
+                analyser.smoothingTimeConstant = 0.5; 
                 bufferLength = analyser.frequencyBinCount;
                 dataArray = new Uint8Array(bufferLength);
                 
@@ -349,45 +372,52 @@
         }
 
         function resizeCanvas() {
-            // High DPI scaling
+            // High DPI scaling (canvas.width and canvas.height for drawing fidelity)
             const dpr = window.devicePixelRatio || 1;
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
+            const rect = canvas.parentElement.getBoundingClientRect(); 
+            // Використовуємо розмір батьківського елемента для правильного масштабу
+            canvas.width = rect.width * dpr; 
             canvas.height = rect.height * dpr;
             ctx.scale(dpr, dpr);
+            
+            // Забезпечуємо, що візуалізатор завжди відображається коректно
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
         }
 
         function drawVisualizer() {
             if (!isPlaying) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                return; // Stop drawing to save battery
+                return;
             }
             
             animationId = requestAnimationFrame(drawVisualizer);
             analyser.getByteFrequencyData(dataArray);
             
-            const width = canvas.width / (window.devicePixelRatio || 1);
-            const height = canvas.height / (window.devicePixelRatio || 1);
+            // Розміри без DPI
+            const width = canvas.offsetWidth;
+            const height = canvas.offsetHeight;
             const centerX = width / 2;
             const centerY = height / 2;
-            // Збільшено радіус візуалізації
-            const radius = 80; 
+            const radius = 90; 
 
             ctx.clearRect(0, 0, width, height);
             
+            // 1. Circular Waveform (Blue/Yellow Gradient)
             ctx.beginPath();
-            ctx.strokeStyle = '#2E5CFF';
-            // Збільшено товщину лінії
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, '#2E5CFF');
+            gradient.addColorStop(0.5, '#FFD600');
+            gradient.addColorStop(1, '#2E5CFF');
+            ctx.strokeStyle = gradient;
             ctx.lineWidth = 3;
-            // Додано світіння для лінії
             ctx.shadowBlur = 15;
-            ctx.shadowColor = '#2E5CFF';
+            ctx.shadowColor = 'rgba(46, 92, 255, 0.7)';
 
-            // Circular Waveform
             for (let i = 0; i < bufferLength; i++) {
                 const angle = (i / bufferLength) * Math.PI * 2;
                 const boost = dataArray[i] / 255;
-                const r = radius + (boost * 70); // Max expansion increased
+                const r = radius + (boost * 80); 
                 
                 const x = centerX + Math.cos(angle) * r;
                 const y = centerY + Math.sin(angle) * r;
@@ -398,18 +428,16 @@
             ctx.closePath();
             ctx.stroke();
 
-            // Inner Glow (Yellow) based on bass
+            // 2. Inner Glow (Yellow) based on bass
             const bass = dataArray[10] / 255;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, radius - 5, 0, Math.PI * 2);
-            // Збільшено яскравість жовтого світіння
-            ctx.fillStyle = `rgba(255, 214, 0, ${bass * 0.8})`;
-            ctx.shadowBlur = 20;
+            ctx.arc(centerX, centerY, radius - 10, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 214, 0, ${bass * 1.0})`; 
+            ctx.shadowBlur = 25; 
             ctx.shadowColor = '#FFD600';
             ctx.fill();
             
-            // Скидання тіні
-            ctx.shadowBlur = 0;
+            ctx.shadowBlur = 0; 
         }
 
         // Play/Pause Toggle
