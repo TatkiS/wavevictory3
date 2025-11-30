@@ -29,13 +29,15 @@
 
     main {
       min-height:100dvh; min-height:100svh;
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-      gap:70px; padding:100px 20px 140px; position:relative; z-index:2;
+      display:flex; flex-direction:column; justify-content:flex-end; align-items:center;
+      padding:120px 20px 100px; /* Земля ближче до низу */
+      position:relative; z-index:2;
     }
 
-    /* ЗЕМЛЯ — ЧИСТА, БЕЗ ВОДЯНИХ ЗНАКІВ */
+    /* ЗЕМЛЯ ОПУЩЕНА НИЖЧЕ + ПО ЦЕНТРУ */
     .earth-wrapper {
       width:340px; height:340px; position:relative;
+      margin-bottom:40px;
     }
     .earth {
       width:100%; height:100%; border-radius:50%;
@@ -46,7 +48,7 @@
     }
     @keyframes rotate { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
 
-    /* ПУЛЬСУЮЧИЙ СИНЬО-ЖОВТИЙ СИГНАЛ НАД УКРАЇНОЮ */
+    /* ПУЛЬСУЮЧИЙ СИГНАЛ НАД УКРАЇНОЮ */
     .ukraine-signal {
       position:absolute;
       top:36%; left:59%;
@@ -63,7 +65,7 @@
       50% { transform:translate(-50%,-50%) scale(1.8); opacity:1; }
     }
 
-    /* КНОПКА ПЛЕЙ — НА ПОВНІЙ ПРОЗОРОСТІ, ТІЛЬКИ ГЛОУ ТА ІКОНКА */
+    /* КНОПКА ПЛЕЙ — ПРОЗОРА, ПУЛЬСУЮЧА */
     #playBtn {
       position:absolute;
       top:50%; left:50%;
@@ -92,15 +94,6 @@
       50% { transform:translate(-50%,-50%) translateY(-22px); }
     }
 
-    .message {
-      font-family:'Orbitron', sans-serif;
-      font-size:clamp(2.4rem, 8vw, 4.5rem); font-weight:900;
-      background:linear-gradient(90deg, #0057b8, #ffd700);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      text-shadow:0 0 70px #ffd700;
-      letter-spacing:5px;
-    }
-
     .support {
       padding:24px 90px; background:#ffd700; color:#000; font-weight:900; font-size:1.7rem;
       border-radius:50px; text-decoration:none; box-shadow:0 0 100px #ffd700;
@@ -113,10 +106,11 @@
     }
 
     @media (max-width:480px) {
-      .earth-wrapper { width:280px; height:280px; }
+      .earth-wrapper { width:280px; height:280px; margin-bottom:30px; }
       #playBtn { width:100px; height:100px; font-size:52px; }
       #playBtn.playing::before { font-size:48px; }
       .ukraine-signal { width:80px; height:80px; }
+      main { padding:100px 16px 90px; }
     }
   </style>
 </head>
@@ -133,8 +127,6 @@
       <div class="ukraine-signal"></div>
       <button id="playBtn" aria-label="Грати / Пауза"></button>
     </div>
-
-    <div class="message">ВСЕ БУДЕ УКРАЇНА</div>
 
     <a href="https://bit.ly/3APXqaS" target="_blank" class="support">ПІДТРИМАТИ ХВИЛЮ</a>
   </main>
