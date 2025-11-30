@@ -1,174 +1,700 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-  <meta name="theme-color" content="#0057B8">
-  <title>ХВИЛЯ ПЕРЕМОГИ • LIVE</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      font-family: 'Arial Black', 'Exo 2', sans-serif;
-      background: #000;
-      color: white;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0e27">
+<title>Хвиля Перемоги | Ukrainian Radio</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    /* Верхня патріотична смуга */
-    header {
-      background: linear-gradient(90deg, #0057B8 50%, #FFD700 50%);
-      padding: 20px 0;
-      text-align: center;
-      position: relative;
-    }
-    h1 {
-      font-size: clamp(2.5rem, 10vw, 6rem);
-      font-weight: 900;
-      letter-spacing: 5px;
-      text-shadow: 0 0 20px #fff;
-    }
-    .live {
-      font-size: clamp(1rem, 4vw, 1.8rem);
-      font-weight: bold;
-      margin-top: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-    }
-    .pulse {
-      width: 14px; height: 14px;
-      background: #ff0044;
-      border-radius: 50%;
-      animation: pulse 1.4s infinite;
-      box-shadow: 0 0 20px #ff0044;
-    }
-    @keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.5); } }
+:root {
+  --neon-blue: #00f0ff;
+  --neon-yellow: #ffed4e;
+  --deep-purple: #0a0e27;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
 
-    /* Головний екран */
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 60px;
-      padding: 20px;
-      position: relative;
-    }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
+  color: #fff;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
 
-    /* Світлова кнопка Play */
-    #play {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: conic-gradient(#0057B8, #FFD700, #0057B8);
-      border: 8px solid white;
-      font-size: 60px;
-      color: white;
-      cursor: pointer;
-      box-shadow: 
-        0 0 60px #FFD700,
-        0 0 120px rgba(255,215,0,0.6),
-        inset 0 0 40px rgba(255,255,255,0.4);
-      transition: all 0.3s ease;
-      position: relative;
-      z-index: 10;
-    }
-    #play:hover, #play:active {
-      transform: scale(1.1);
-      box-shadow: 0 0 100px #FFD700, 0 0 200px rgba(255,215,0,0.8);
-    }
+/* Animated Background */
+.bg-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+}
 
-    /* Кнопка підтримки */
-    .support {
-      padding: 16px 40px;
-      background: #FFD700;
-      color: #000;
-      font-weight: 900;
-      font-size: clamp(1.1rem, 4vw, 1.6rem);
-      border-radius: 50px;
-      text-decoration: none;
-      box-shadow: 0 0 40px #FFD700;
-      animation: glow 3s infinite alternate;
-    }
-    @keyframes glow { from { box-shadow: 0 0 40px #FFD700; } to { box-shadow: 0 0 80px #FFD700; } }
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: float 20s infinite ease-in-out;
+}
 
-    /* Футер */
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: clamp(1rem, 3vw, 1.4rem);
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-  </style>
+.orb1 { width: 400px; height: 400px; background: var(--neon-blue); top: 10%; left: -10%; animation-delay: 0s; }
+.orb2 { width: 350px; height: 350px; background: var(--neon-yellow); bottom: 20%; right: -5%; animation-delay: 3s; }
+.orb3 { width: 300px; height: 300px; background: #6366f1; top: 50%; left: 50%; animation-delay: 6s; }
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(50px, -50px) scale(1.1); }
+  66% { transform: translate(-30px, 30px) scale(0.9); }
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  backdrop-filter: blur(20px);
+  background: rgba(10, 14, 39, 0.7);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--neon-blue);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  z-index: 1;
+}
+
+.hero-content h1 {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  animation: glow 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { text-shadow: 0 0 20px rgba(0, 240, 255, 0.3); }
+  50% { text-shadow: 0 0 40px rgba(0, 240, 255, 0.6); }
+}
+
+.hero-content p {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: #b4b7c9;
+  margin-bottom: 2rem;
+}
+
+/* Player Section */
+.player-section {
+  position: relative;
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+  z-index: 1;
+}
+
+.player-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 30px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s;
+}
+
+.player-card:hover {
+  transform: translateY(-5px);
+}
+
+.visualizer-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 2rem;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+#audioVisualizer {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.play-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--neon-blue), #6366f1);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s;
+  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
+}
+
+.play-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 15px 40px rgba(0, 240, 255, 0.5);
+}
+
+.play-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 12px 0 12px 20px;
+  border-color: transparent transparent transparent #fff;
+  transform: translate(-40%, -50%);
+  transition: all 0.3s;
+}
+
+.play-btn.playing::before {
+  border-style: double;
+  border-width: 0 0 0 20px;
+  border-color: transparent transparent transparent #fff;
+  transform: translate(-50%, -50%);
+}
+
+.volume-control {
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.volume-control input {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.volume-control input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--neon-yellow);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--neon-yellow);
+}
+
+.volume-control input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--neon-yellow);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.now-playing {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.now-playing h3 {
+  font-size: 0.9rem;
+  color: #b4b7c9;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.track-info {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--neon-blue);
+}
+
+/* Content Sections */
+.content-section {
+  max-width: 1200px;
+  margin: 6rem auto;
+  padding: 0 2rem;
+  z-index: 1;
+  position: relative;
+}
+
+.section-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 3rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  transition: all 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--neon-blue);
+  box-shadow: 0 20px 40px rgba(0, 240, 255, 0.2);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--neon-yellow);
+}
+
+.feature-card p {
+  color: #b4b7c9;
+  line-height: 1.6;
+}
+
+/* Support Button */
+.support-section {
+  text-align: center;
+  margin: 4rem 0;
+}
+
+.support-btn {
+  display: inline-block;
+  padding: 1.2rem 3rem;
+  background: linear-gradient(135deg, var(--neon-yellow), #ffa500);
+  color: #000;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+  box-shadow: 0 10px 30px rgba(255, 237, 78, 0.3);
+}
+
+.support-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(255, 237, 78, 0.5);
+}
+
+/* Footer */
+footer {
+  background: rgba(10, 14, 39, 0.8);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--glass-border);
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-top: 6rem;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #b4b7c9;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: var(--neon-blue);
+}
+
+.copyright {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links {
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    width: 100%;
+    flex-direction: column;
+    background: rgba(10, 14, 39, 0.98);
+    padding: 2rem;
+    transition: left 0.3s;
+  }
+  
+  .nav-links.active {
+    left: 0;
+  }
+  
+  .menu-toggle {
+    display: block;
+  }
+  
+  .player-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .player-controls {
+    gap: 1rem;
+  }
+  
+  .play-btn {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 6rem 1rem 2rem;
+  }
+  
+  .visualizer-container {
+    height: 150px;
+  }
+  
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 </head>
 <body>
+<div class="bg-animation">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
 
-  <header>
+<nav>
+  <div class="nav-container">
+    <div class="logo">🌊 ХВИЛЯ</div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#player">Слухати</a></li>
+      <li><a href="#about">Про нас</a></li>
+      <li><a href="#contact">Контакти</a></li>
+      <li><a href="https://t.me/wavevictory" target="_blank">Telegram</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
     <h1>ХВИЛЯ ПЕРЕМОГИ</h1>
-    <div class="live">
-      <div class="pulse"></div>
-      LIVE 24/7
+    <p>Українське радіо нового покоління 🇺🇦</p>
+  </div>
+</section>
+
+<section id="player" class="player-section">
+  <div class="player-card">
+    <div class="visualizer-container">
+      <canvas id="audioVisualizer"></canvas>
     </div>
-  </header>
+    
+    <div class="player-controls">
+      <button class="play-btn" id="playBtn" onclick="togglePlay()"></button>
+      <div class="volume-control">
+        <input type="range" id="volume" min="0" max="100" value="80" oninput="changeVolume(this.value)">
+      </div>
+    </div>
+    
+    <div class="now-playing">
+      <h3>Зараз в ефірі</h3>
+      <div class="track-info" id="trackInfo">Ukrainian Music Non-Stop</div>
+    </div>
+  </div>
+</section>
 
-  <main>
-    <button id="play">▶</button>
-    <a href="https://bit.ly/3APXqaS" target="_blank" class="support">
-      ☕ ПІДТРИМАТИ РАДІО
-    </a>
-  </main>
+<section id="about" class="content-section">
+  <h2 class="section-title">Про Радіо</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🎵</div>
+      <h3>Сучасна Музика</h3>
+      <p>Найкращі українські треки та світові хіти без зупинки</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🚀</div>
+      <h3>Без Реклами</h3>
+      <p>Чиста музика 24/7 без переривань на рекламу</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🇺🇦</div>
+      <h3>Українське</h3>
+      <p>Підтримуємо вітчизняних виконавців та промоутуємо українську культуру</p>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    СЛАВА УКРАЇНІ • ГЕРОЯМ СЛАВА
-  </footer>
+<section class="support-section">
+  <a href="https://bit.ly/3APXqaS" target="_blank" class="support-btn">☕ Підтримати Радіо</a>
+</section>
 
-  <script>
-    const stream = "https://stream.zeno.fm/9cu5cnlqnlptv";
-    let audio = null;
-    const btn = document.getElementById('play');
+<section id="contact" class="content-section">
+  <h2 class="section-title">Контакти</h2>
+  <div class="feature-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+    <p style="font-size: 1.2rem;">📧 wavevictory@protonmail.com</p>
+    <p style="margin-top: 1rem;">💬 <a href="https://t.me/wavevictory" target="_blank" style="color: var(--neon-blue);">Telegram канал</a></p>
+  </div>
+</section>
 
-    function startRadio() {
-      if (audio) return;
+<footer>
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="#player">Слухати</a>
+      <a href="#about">Про нас</a>
+      <a href="#contact">Контакти</a>
+      <a href="https://t.me/wavevictory" target="_blank">Telegram</a>
+    </div>
+    <p class="copyright">© 2024 Хвиля Перемоги. Слава Україні! 🇺🇦</p>
+  </div>
+</footer>
 
-      audio = new Audio(stream);
-      audio.crossOrigin = "anonymous";
-      audio.volume = 0.8;
-      audio.loop = true;
+<audio id="radioStream" crossorigin="anonymous" preload="none">
+  <source src="https://stream.zeno.fm/9cu5cnlqnlptv" type="audio/mpeg">
+</audio>
 
-      audio.play().then(() => {
-        btn.textContent = "❚❚";
-      }).catch(() => {
-        // Якщо браузер блокує — чекаємо клік
-        btn.onclick = () => {
-          audio.play();
-          btn.textContent = "❚❚";
-        };
-      });
+<script>
+const audio = document.getElementById('radioStream');
+const playBtn = document.getElementById('playBtn');
+const canvas = document.getElementById('audioVisualizer');
+const ctx = canvas.getContext('2d');
+const volumeSlider = document.getElementById('volume');
+
+let audioContext;
+let analyser;
+let source;
+let dataArray;
+let isPlaying = false;
+
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+
+window.addEventListener('resize', () => {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+});
+
+async function togglePlay() {
+  try {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      source = audioContext.createMediaElementSource(audio);
+      
+      analyser.fftSize = 128;
+      analyser.smoothingTimeConstant = 0.85;
+      
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+      
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
     }
 
-    btn.addEventListener('click', () => {
-      if (!audio) startRadio();
-      else if (audio.paused) {
-        audio.play();
-        btn.textContent = "❚❚";
-      } else {
-        audio.pause();
-        btn.textContent = "▶";
-      }
-    });
+    if (isPlaying) {
+      audio.pause();
+      isPlaying = false;
+      playBtn.classList.remove('playing');
+    } else {
+      // Загружаємо аудіо перед відтворенням
+      audio.load();
+      
+      // Чекаємо поки аудіо готове
+      await new Promise((resolve) => {
+        audio.addEventListener('canplay', resolve, { once: true });
+      });
+      
+      await audio.play();
+      isPlaying = true;
+      playBtn.classList.add('playing');
+      visualize();
+    }
+  } catch (error) {
+    console.error('Playback error:', error);
+    isPlaying = false;
+    playBtn.classList.remove('playing');
+    
+    if (error.name === 'NotAllowedError') {
+      alert('Браузер блокує автовідтворення. Натисніть кнопку ще раз.');
+    } else if (error.name === 'NotSupportedError') {
+      alert('Формат аудіо не підтримується вашим браузером.');
+    } else {
+      alert('Помилка відтворення. Перевірте з\'єднання з інтернетом.');
+    }
+  }
+}
 
-    // Розблоковуємо на першому дотику (обов’язково для iOS)
-    document.addEventListener('touchstart', startRadio, { once: true });
-    document.addEventListener('click', startRadio, { once: true });
-  </script>
+function visualize() {
+  if (!isPlaying) return;
+  
+  requestAnimationFrame(visualize);
+  analyser.getByteFrequencyData(dataArray);
+  
+  ctx.fillStyle = 'rgba(10, 14, 39, 0.2)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  const barWidth = canvas.width / dataArray.length;
+  
+  for (let i = 0; i < dataArray.length; i++) {
+    const barHeight = (dataArray[i] / 255) * canvas.height * 0.8;
+    const x = i * barWidth;
+    const y = canvas.height - barHeight;
+    
+    const gradient = ctx.createLinearGradient(x, y, x, canvas.height);
+    gradient.addColorStop(0, '#00f0ff');
+    gradient.addColorStop(0.5, '#6366f1');
+    gradient.addColorStop(1, '#ffed4e');
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, y, barWidth - 2, barHeight);
+  }
+}
+
+function changeVolume(value) {
+  audio.volume = value / 100;
+}
+
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('active');
+}
+
+audio.volume = 0.8;
+
+// Додаємо обробник для resumе аудіо контексту
+document.addEventListener('click', () => {
+  if (audioContext && audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+}, { once: true });
+
+audio.addEventListener('error', (e) => {
+  console.error('Audio error:', e);
+  isPlaying = false;
+  playBtn.classList.remove('playing');
+  alert('Помилка завантаження потоку. Перевірте з\'єднання.');
+});
+
+// Автоматичне відновлення при розриві з'єднання
+audio.addEventListener('stalled', () => {
+  console.log('Stream stalled, attempting reload...');
+  if (isPlaying) {
+    audio.load();
+    audio.play().catch(err => console.error('Reload failed:', err));
+  }
+});
+</script>
 </body>
 </html>
