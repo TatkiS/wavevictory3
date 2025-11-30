@@ -2,144 +2,173 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <meta name="theme-color" content="#0057B8">
-  <title>ХВИЛЯ ПЕРЕМОГИ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
-
+  <title>ХВИЛЯ ПЕРЕМОГИ • LIVE</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      min-height: 100dvh;
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: 'Arial Black', 'Exo 2', sans-serif;
       background: #000;
       color: white;
-      font-family: 'Exo 2', sans-serif;
+    }
+    body {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
     }
-    .top {
-      background: linear-gradient(90deg, #0057B8, #FFD700);
-      padding: 12px 0;
-      text-align: center;
-      font-weight: 900;
-      font-size: 15px;
-      letter-spacing: 1px;
-      animation: ticker 28s linear infinite;
-    }
-    @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
+    /* Верхня патріотична смуга */
+    header {
+      background: linear-gradient(90deg, #0057B8 50%, #FFD700 50%);
+      padding: 20px 0;
+      text-align: center;
+      position: relative;
+    }
+    h1 {
+      font-size: clamp(2.5rem, 10vw, 6rem);
+      font-weight: 900;
+      letter-spacing: 5px;
+      text-shadow: 0 0 20px #fff;
+    }
+    .live {
+      font-size: clamp(1rem, 4vw, 1.8rem);
+      font-weight: bold;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+    .pulse {
+      width: 14px; height: 14px;
+      background: #ff0044;
+      border-radius: 50%;
+      animation: pulse 1.4s infinite;
+      box-shadow: 0 0 20px #ff0044;
+    }
+    @keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.5); } }
+
+    /* Головний екран */
     main {
       flex: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      padding: 40px 20px;
-      text-align: center;
-    }
-    h1 {
-      font-size: 48px;
-      font-weight: 900;
-      margin-bottom: 8px;
-      background: linear-gradient(90deg, #0057B8, #FFD700);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .live {
-      display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 40px;
+      gap: 60px;
+      padding: 20px;
+      position: relative;
     }
-    .dot {
-      width: 12px; height: 12px;
-      background: #ff0044;
-      border-radius: 50%;
-      animation: pulse 1.6s infinite;
-    }
-    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
 
+    /* Світлова кнопка Play */
     #play {
-      width: 88px; height: 88px;
+      width: 140px;
+      height: 140px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #0057B8, #FFD700);
-      border: none;
-      font-size: 36px;
+      background: conic-gradient(#0057B8, #FFD700, #0057B8);
+      border: 8px solid white;
+      font-size: 60px;
       color: white;
       cursor: pointer;
-      box-shadow: 0 8px 30px rgba(0,87,184,0.6);
-      transition: all 0.2s;
+      box-shadow: 
+        0 0 60px #FFD700,
+        0 0 120px rgba(255,215,0,0.6),
+        inset 0 0 40px rgba(255,255,255,0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 10;
     }
-    #play:active { transform: scale(0.92); }
+    #play:hover, #play:active {
+      transform: scale(1.1);
+      box-shadow: 0 0 100px #FFD700, 0 0 200px rgba(255,215,0,0.8);
+    }
 
+    /* Кнопка підтримки */
     .support {
-      margin-top: 50px;
-      padding: 14px 32px;
+      padding: 16px 40px;
       background: #FFD700;
       color: #000;
       font-weight: 900;
-      font-size: 17px;
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
       border-radius: 50px;
       text-decoration: none;
-      display: inline-block;
-      box-shadow: 0 6px 20px rgba(255,215,0,0.4);
+      box-shadow: 0 0 40px #FFD700;
+      animation: glow 3s infinite alternate;
     }
+    @keyframes glow { from { box-shadow: 0 0 40px #FFD700; } to { box-shadow: 0 0 80px #FFD700; } }
 
+    /* Футер */
     footer {
-      background: #111;
-      padding: 20px;
       text-align: center;
-      font-size: 14px;
-      opacity: 0.8;
+      padding: 20px;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      font-weight: bold;
+      letter-spacing: 2px;
     }
   </style>
 </head>
 <body>
 
-  <div class="top">
-    СЛАВА УКРАЇНІ! • ГЕРОЯМ СЛАВА! • 24/7 БЕЗ РЕКЛАМИ • ПІДТРИМАТИ НАС: НА КАВУ • ДЯКУЄМО!
-  </div>
+  <header>
+    <h1>ХВИЛЯ ПЕРЕМОГИ</h1>
+    <div class="live">
+      <div class="pulse"></div>
+      LIVE 24/7
+    </div>
+  </header>
 
   <main>
-    <h1>ХВИЛЯ ПЕРЕМОГИ</h1>
-    <div class="live"><div class="dot"></div> LIVE 24/7</div>
-
     <button id="play">▶</button>
-
     <a href="https://bit.ly/3APXqaS" target="_blank" class="support">
       ☕ ПІДТРИМАТИ РАДІО
     </a>
   </main>
 
   <footer>
-    © 2025–2026 Хвиля Перемоги<br>СЛАВА УКРАЇНІ! ГЕРОЯМ СЛАВА!
+    СЛАВА УКРАЇНІ • ГЕРОЯМ СЛАВА
   </footer>
 
   <script>
     const stream = "https://stream.zeno.fm/9cu5cnlqnlptv";
-    const sound = new Howl({ src: [stream], html5: true, volume: 0.8 });
+    let audio = null;
     const btn = document.getElementById('play');
-    let playing = false;
 
-    btn.onclick = () => {
-      if (playing) {
-        sound.pause();
-        btn.textContent = '▶';
+    function startRadio() {
+      if (audio) return;
+
+      audio = new Audio(stream);
+      audio.crossOrigin = "anonymous";
+      audio.volume = 0.8;
+      audio.loop = true;
+
+      audio.play().then(() => {
+        btn.textContent = "❚❚";
+      }).catch(() => {
+        // Якщо браузер блокує — чекаємо клік
+        btn.onclick = () => {
+          audio.play();
+          btn.textContent = "❚❚";
+        };
+      });
+    }
+
+    btn.addEventListener('click', () => {
+      if (!audio) startRadio();
+      else if (audio.paused) {
+        audio.play();
+        btn.textContent = "❚❚";
       } else {
-        sound.play();
-        btn.textContent = '❚ ❚';
+        audio.pause();
+        btn.textContent = "▶";
       }
-      playing = !playing;
-    };
+    });
 
-    // розблоковуємо автоплей після першого тапу (для мобілок)
-    document.body.addEventListener('touchstart', () => {}, { once: true });
+    // Розблоковуємо на першому дотику (обов’язково для iOS)
+    document.addEventListener('touchstart', startRadio, { once: true });
+    document.addEventListener('click', startRadio, { once: true });
   </script>
 </body>
 </html>
