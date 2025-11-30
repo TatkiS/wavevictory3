@@ -128,19 +128,19 @@ nav {
 /* Hero Section */
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 40vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 8rem 2rem 4rem;
+  padding: 6rem 2rem 2rem;
   z-index: 1;
 }
 
 .hero-content h1 {
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 900;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   background: linear-gradient(135deg, var(--neon-blue), var(--neon-yellow));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -155,16 +155,16 @@ nav {
 }
 
 .hero-content p {
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-size: clamp(1rem, 2vw, 1.2rem);
   color: #b4b7c9;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 /* Player Section */
 .player-section {
   position: relative;
   max-width: 900px;
-  margin: 3rem auto;
+  margin: 1rem auto;
   padding: 0 2rem;
   z-index: 1;
 }
@@ -186,7 +186,7 @@ nav {
 .visualizer-container {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 280px;
   margin-bottom: 2rem;
   border-radius: 20px;
   overflow: hidden;
@@ -442,6 +442,11 @@ footer {
     display: block;
   }
   
+  .hero {
+    min-height: 35vh;
+    padding: 5rem 1.5rem 1.5rem;
+  }
+  
   .player-card {
     padding: 2rem 1.5rem;
   }
@@ -454,15 +459,37 @@ footer {
     width: 70px;
     height: 70px;
   }
+  
+  .visualizer-container {
+    height: 220px;
+  }
 }
 
 @media (max-width: 480px) {
   .hero {
-    padding: 6rem 1rem 2rem;
+    min-height: 30vh;
+    padding: 4.5rem 1rem 1rem;
+  }
+  
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-content p {
+    font-size: 0.95rem;
   }
   
   .visualizer-container {
-    height: 150px;
+    height: 180px;
+  }
+  
+  .player-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .play-btn {
+    width: 60px;
+    height: 60px;
   }
   
   .feature-grid {
@@ -579,6 +606,7 @@ let analyser;
 let source;
 let dataArray;
 let isPlaying = false;
+let animationTime = 0;
 
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
@@ -643,24 +671,101 @@ function visualize() {
   requestAnimationFrame(visualize);
   analyser.getByteFrequencyData(dataArray);
   
+  animationTime += 0.05;
+  
+  // Очищення canvas
   ctx.fillStyle = 'rgba(10, 14, 39, 0.2)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  const barWidth = canvas.width / dataArray.length;
+  const points = 100;
+  const wavePoints = [];
   
-  for (let i = 0; i < dataArray.length; i++) {
-    const barHeight = (dataArray[i] / 255) * canvas.height * 0.8;
-    const x = i * barWidth;
-    const y = canvas.height - barHeight;
+  // Створюємо точки хвилі з музичними даними
+  for (let i = 0; i <= points; i++) {
+    const x = (canvas.width / points) * i;
+    const dataIndex = Math.floor((i / points) * dataArray.length);
+    const amplitude = (dataArray[dataIndex] / 255) * 40;
     
-    const gradient = ctx.createLinearGradient(x, y, x, canvas.height);
-    gradient.addColorStop(0, '#00f0ff');
-    gradient.addColorStop(0.5, '#6366f1');
-    gradient.addColorStop(1, '#ffed4e');
+    // Синусоїдальна хвиля з випадковим коливанням
+    const wave1 = Math.sin((i / points) * Math.PI * 2 + animationTime) * 15;
+    const wave2 = Math.sin((i / points) * Math.PI * 4 + animationTime * 1.5) * 8;
+    const wave3 = Math.sin((i / points) * Math.PI * 6 - animationTime * 0.8) * 5;
     
-    ctx.fillStyle = gradient;
-    ctx.fillRect(x, y, barWidth - 2, barHeight);
+    const y = (canvas.height / 2) + wave1 + wave2 + wave3 + amplitude;
+    wavePoints.push({ x, y });
   }
+  
+  // Малюємо синю частину (верх)
+  const blueGradient = ctx.createLinearGradient(0, 0, 0, canvas.height / 2);
+  blueGradient.addColorStop(0, '#00d4ff');
+  blueGradient.addColorStop(0.6, '#0057b7');
+  blueGradient.addColorStop(1, '#003d82');
+  
+  ctx.fillStyle = blueGradient;
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  
+  // Плавна крива через всі точки (верхня частина)
+  for (let i = 0; i < wavePoints.length; i++) {
+    if (i === 0) {
+      ctx.lineTo(wavePoints[i].x, wavePoints[i].y);
+    } else {
+      const xc = (wavePoints[i].x + wavePoints[i - 1].x) / 2;
+      const yc = (wavePoints[i].y + wavePoints[i - 1].y) / 2;
+      ctx.quadraticCurveTo(wavePoints[i - 1].x, wavePoints[i - 1].y, xc, yc);
+    }
+  }
+  
+  ctx.lineTo(canvas.width, 0);
+  ctx.closePath();
+  ctx.fill();
+  
+  // Малюємо жовту частину (низ)
+  const yellowGradient = ctx.createLinearGradient(0, canvas.height / 2, 0, canvas.height);
+  yellowGradient.addColorStop(0, '#ffd700');
+  yellowGradient.addColorStop(0.4, '#ffed4e');
+  yellowGradient.addColorStop(1, '#ff9500');
+  
+  ctx.fillStyle = yellowGradient;
+  ctx.beginPath();
+  
+  // Починаємо з останньої точки хвилі
+  ctx.moveTo(canvas.width, canvas.height);
+  ctx.lineTo(0, canvas.height);
+  
+  // Плавна крива через всі точки (нижня частина)
+  for (let i = 0; i < wavePoints.length; i++) {
+    if (i === 0) {
+      ctx.lineTo(wavePoints[i].x, wavePoints[i].y);
+    } else {
+      const xc = (wavePoints[i].x + wavePoints[i - 1].x) / 2;
+      const yc = (wavePoints[i].y + wavePoints[i - 1].y) / 2;
+      ctx.quadraticCurveTo(wavePoints[i - 1].x, wavePoints[i - 1].y, xc, yc);
+    }
+  }
+  
+  ctx.closePath();
+  ctx.fill();
+  
+  // Світловий ефект на лінії розділення
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+  ctx.lineWidth = 3;
+  ctx.shadowBlur = 15;
+  ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
+  ctx.beginPath();
+  
+  for (let i = 0; i < wavePoints.length; i++) {
+    if (i === 0) {
+      ctx.moveTo(wavePoints[i].x, wavePoints[i].y);
+    } else {
+      const xc = (wavePoints[i].x + wavePoints[i - 1].x) / 2;
+      const yc = (wavePoints[i].y + wavePoints[i - 1].y) / 2;
+      ctx.quadraticCurveTo(wavePoints[i - 1].x, wavePoints[i - 1].y, xc, yc);
+    }
+  }
+  
+  ctx.stroke();
+  ctx.shadowBlur = 0;
 }
 
 function changeVolume(value) {
