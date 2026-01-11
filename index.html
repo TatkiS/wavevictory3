@@ -1,805 +1,497 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0a0e27">
-<title>Хвиля Перемоги | Ukrainian Radio</title>
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f0f11">
+    <meta name="description" content="Сучасне Українське Радіо. Хвиля Перемоги.">
+    <title>ХВИЛЯ ПЕРЕМОГИ | APP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #0f0f11;
+            --card-bg: #18181b;
+            --accent-blue: #2E5CFF; /* Ультра-сучасний синій */
+            --accent-yellow: #FFD600; /* Сигнальний жовтий */
+            --text-main: #ffffff;
+            --text-sec: #8d8d93;
+            --border-radius: 24px;
+            --padding: 24px;
+            --gap: 16px;
+        }
 
-:root {
-  --neon-blue: #00f0ff;
-  --neon-yellow: #ffed4e;
-  --deep-purple: #0a0e27;
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            /* Динамічний фон */
+            background-image: radial-gradient(circle at 10% 20%, rgba(46, 92, 255, 0.1) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(255, 214, 0, 0.05) 0%, transparent 40%);
+        }
 
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
-  color: #fff;
-  overflow-x: hidden;
-  min-height: 100vh;
-}
+        /* --- LAYOUT: BENTO GRID --- */
+        .app-container {
+            width: 100%;
+            max-width: 1200px;
+            padding: var(--gap);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto auto; 
+            gap: var(--gap);
+            /* Анімація появи */
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
 
-/* Animated Background */
-.bg-animation {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.3;
-}
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: var(--padding);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255,255,255,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  animation: float 20s infinite ease-in-out;
-}
+        .card:hover {
+            border-color: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
 
-.orb1 { width: 400px; height: 400px; background: var(--neon-blue); top: 10%; left: -10%; animation-delay: 0s; }
-.orb2 { width: 350px; height: 350px; background: var(--neon-yellow); bottom: 20%; right: -5%; animation-delay: 3s; }
-.orb3 { width: 300px; height: 300px; background: #6366f1; top: 50%; left: 50%; animation-delay: 6s; }
+        /* --- GRID AREAS --- */
+        .area-main-player { grid-column: span 2; grid-row: span 2; min-height: 320px; }
+        .area-status { grid-column: span 1; }
+        .area-support { grid-column: span 1; background: var(--accent-yellow); color: #000; }
+        .area-social { grid-column: span 1; }
+        .area-info { grid-column: span 1; }
+        .area-ticker { grid-column: span 4; padding: 12px; border-radius: 100px; display: flex; align-items: center; }
 
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(50px, -50px) scale(1.1); }
-  66% { transform: translate(-30px, 30px) scale(0.9); }
-}
+        /* --- TYPOGRAPHY & ELEMENTS --- */
+        h1 { font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-sec); font-weight: 800; margin-bottom: 8px; }
+        h2 { font-size: 28px; font-weight: 800; line-height: 1.1; }
+        p { font-size: 14px; color: var(--text-sec); margin-top: 8px; line-height: 1.4; }
 
-/* Navigation */
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  backdrop-filter: blur(20px);
-  background: rgba(10, 14, 39, 0.7);
-  border-bottom: 1px solid var(--glass-border);
-}
+        /* --- PLAYER COMPONENT (КЛЮЧОВІ ЗМІНИ ТУТ) --- */
+        .player-wrapper {
+            /* Батьківський контейнер, який покриває всю картку і використовує flex для центрування */
+            height: 100%; 
+            width: 100%;
+            position: absolute; /* Позиціонуємо абсолютно, щоб він покривав все, крім padding картки */
+            top: 0;
+            left: 0;
+            display: flex; 
+            justify-content: center; /* Центрує кнопку по горизонталі */
+            align-items: center; /* Центрує кнопку по вертикалі */
+            z-index: 5; /* Високий z-index, щоб кнопка була над візуалізатором */
+            pointer-events: none; /* Дозволяє клікам "проходити" на елементи під ним */
+        }
+        
+        .play-btn-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 0 0 rgba(46, 92, 255, 0.7);
+            transition: all 0.3s ease;
+            position: relative; 
+            z-index: 10;
+            pointer-events: auto; /* Дозволяємо клікати на кнопку */
+        }
+        
+        .play-btn-circle svg { width: 32px; height: 32px; fill: white; transition: 0.2s; }
+        .play-btn-circle:active { transform: scale(0.9); }
+        
+        .is-playing .play-btn-circle {
+            background: #fff;
+            box-shadow: 0 0 30px rgba(255,255,255,0.2);
+        }
+        .is-playing .play-btn-circle svg { fill: #000; }
 
-.nav-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 1.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+        /* VISUALIZER CANVAS */
+        #visualizer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.8; 
+            /* На мобільному можемо трохи підняти візуалізатор, щоб він візуально співпадав з центром картки */
+            /* transform: translate(-50%, -50%); - це і є ідеальний центр */
+        }
+        
+        /* Текст та гучність розташовані зверху кнопки, тому мають вищий z-index */
+        .top-info {
+            position: relative;
+            z-index: 20; /* Вищий, ніж кнопка та візуалізатор */
+        }
+        
+        .bottom-controls {
+            position: absolute;
+            bottom: 24px; 
+            right: 24px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+            z-index: 20;
+        }
 
-.logo {
-  font-size: 1.8rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-yellow));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.5px;
-}
 
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-}
+        /* --- STATUS INDICATOR --- */
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .dot { width: 8px; height: 8px; background: #ff3b30; border-radius: 50%; animation: blink 2s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-.nav-links a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s;
-  position: relative;
-}
+        /* --- SUPPORT BUTTON STYLE --- */
+        .support-link {
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+        }
+        .icon-box { font-size: 32px; margin-bottom: 10px; }
 
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--neon-blue);
-  transition: width 0.3s;
-}
+        /* --- SOCIAL BUTTON STYLE --- */
+        .social-link {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .tg-icon {
+            width: 48px; height: 48px;
+            background: #2AABEE;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .tg-icon svg { width: 24px; fill: white; }
 
-.nav-links a:hover::after {
-  width: 100%;
-}
+        /* --- TICKER --- */
+        .ticker-content {
+            white-space: nowrap;
+            overflow: hidden;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+        }
+        .ticker-content span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: ticker 25s linear infinite;
+        }
+        @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-.menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
+        /* --- EQUALIZER BARS (CSS fallback) --- */
+        .eq-bars { display: flex; gap: 4px; height: 20px; align-items: flex-end; }
+        .bar { width: 4px; background: var(--accent-blue); animation: eq 0.5s infinite alternate; border-radius: 2px; }
+        .bar:nth-child(1) { height: 10px; animation-delay: 0.1s; }
+        .bar:nth-child(2) { height: 18px; animation-delay: 0.3s; }
+        .bar:nth-child(3) { height: 6px; animation-delay: 0.2s; }
+        @keyframes eq { 0% { height: 4px; opacity: 0.5; } 100% { height: 20px; opacity: 1; } }
 
-/* Hero Section */
-.hero {
-  position: relative;
-  min-height: 40vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 6rem 2rem 2rem;
-  z-index: 1;
-}
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .app-container { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+            .area-main-player { grid-column: span 2; min-height: 280px; }
+            .area-ticker { grid-column: span 2; order: -1; margin-bottom: 10px; }
+        }
 
-.hero-content h1 {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 900;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-yellow));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1.1;
-  animation: glow 3s ease-in-out infinite;
-}
-
-@keyframes glow {
-  0%, 100% { text-shadow: 0 0 20px rgba(0, 240, 255, 0.3); }
-  50% { text-shadow: 0 0 40px rgba(0, 240, 255, 0.6); }
-}
-
-.hero-content p {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  color: #b4b7c9;
-  margin-bottom: 1rem;
-}
-
-/* Player Section */
-.player-section {
-  position: relative;
-  max-width: 900px;
-  margin: 1rem auto;
-  padding: 0 2rem;
-  z-index: 1;
-}
-
-.player-card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 30px;
-  padding: 3rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s;
-}
-
-.player-card:hover {
-  transform: translateY(-5px);
-}
-
-.visualizer-container {
-  position: relative;
-  width: 100%;
-  height: 280px;
-  margin-bottom: 2rem;
-  border-radius: 20px;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.3);
-}
-
-#audioVisualizer {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.player-controls {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.play-btn {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  border: none;
-  background: linear-gradient(135deg, var(--neon-blue), #6366f1);
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s;
-  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
-}
-
-.play-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 15px 40px rgba(0, 240, 255, 0.5);
-}
-
-.play-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 12px 0 12px 20px;
-  border-color: transparent transparent transparent #fff;
-  transform: translate(-40%, -50%);
-  transition: all 0.3s;
-}
-
-.play-btn.playing::before {
-  border-style: double;
-  border-width: 0 0 0 20px;
-  border-color: transparent transparent transparent #fff;
-  transform: translate(-50%, -50%);
-}
-
-.volume-control {
-  flex: 1;
-  min-width: 200px;
-  max-width: 300px;
-}
-
-.volume-control input {
-  width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  outline: none;
-  -webkit-appearance: none;
-}
-
-.volume-control input::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  background: var(--neon-yellow);
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 10px var(--neon-yellow);
-}
-
-.volume-control input::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  background: var(--neon-yellow);
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-}
-
-.now-playing {
-  text-align: center;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--glass-border);
-}
-
-.now-playing h3 {
-  font-size: 0.9rem;
-  color: #b4b7c9;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.track-info {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--neon-blue);
-}
-
-/* Content Sections */
-.content-section {
-  max-width: 1200px;
-  margin: 6rem auto;
-  padding: 0 2rem;
-  z-index: 1;
-  position: relative;
-}
-
-.section-title {
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 800;
-  margin-bottom: 3rem;
-  text-align: center;
-  background: linear-gradient(135deg, var(--neon-blue), var(--neon-yellow));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-.feature-card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 2.5rem;
-  transition: all 0.3s;
-}
-
-.feature-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--neon-blue);
-  box-shadow: 0 20px 40px rgba(0, 240, 255, 0.2);
-}
-
-.feature-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.feature-card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: var(--neon-yellow);
-}
-
-.feature-card p {
-  color: #b4b7c9;
-  line-height: 1.6;
-}
-
-/* Support Button */
-.support-section {
-  text-align: center;
-  margin: 4rem 0;
-}
-
-.support-btn {
-  display: inline-block;
-  padding: 1.2rem 3rem;
-  background: linear-gradient(135deg, var(--neon-yellow), #ffa500);
-  color: #000;
-  text-decoration: none;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  transition: all 0.3s;
-  box-shadow: 0 10px 30px rgba(255, 237, 78, 0.3);
-}
-
-.support-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(255, 237, 78, 0.5);
-}
-
-/* Footer */
-footer {
-  background: rgba(10, 14, 39, 0.8);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid var(--glass-border);
-  padding: 3rem 2rem;
-  text-align: center;
-  margin-top: 6rem;
-  position: relative;
-  z-index: 1;
-}
-
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.footer-links a {
-  color: #b4b7c9;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.footer-links a:hover {
-  color: var(--neon-blue);
-}
-
-.copyright {
-  color: #6b7280;
-  font-size: 0.9rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .nav-links {
-    position: fixed;
-    top: 80px;
-    left: -100%;
-    width: 100%;
-    flex-direction: column;
-    background: rgba(10, 14, 39, 0.98);
-    padding: 2rem;
-    transition: left 0.3s;
-  }
-  
-  .nav-links.active {
-    left: 0;
-  }
-  
-  .menu-toggle {
-    display: block;
-  }
-  
-  .hero {
-    min-height: 35vh;
-    padding: 5rem 1.5rem 1.5rem;
-  }
-  
-  .player-card {
-    padding: 2rem 1.5rem;
-  }
-  
-  .player-controls {
-    gap: 1rem;
-  }
-  
-  .play-btn {
-    width: 70px;
-    height: 70px;
-  }
-  
-  .visualizer-container {
-    height: 220px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero {
-    min-height: 30vh;
-    padding: 4.5rem 1rem 1rem;
-  }
-  
-  .hero-content h1 {
-    font-size: 2rem;
-  }
-  
-  .hero-content p {
-    font-size: 0.95rem;
-  }
-  
-  .visualizer-container {
-    height: 180px;
-  }
-  
-  .player-card {
-    padding: 1.5rem 1rem;
-  }
-  
-  .play-btn {
-    width: 60px;
-    height: 60px;
-  }
-  
-  .feature-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
+        @media (max-width: 600px) {
+            .app-container { display: flex; flex-direction: column; padding: 16px; }
+            .card { min-height: 140px; }
+            .area-main-player { min-height: 350px; flex: none; }
+            .area-ticker { order: 10; margin-top: 20px; background: transparent; border: none; }
+            h2 { font-size: 24px; }
+            
+            .play-btn-circle { width: 90px; height: 90px; }
+            #visualizer { width: 300px; height: 300px; }
+        }
+    </style>
 </head>
 <body>
-<div class="bg-animation">
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
-</div>
 
-<nav>
-  <div class="nav-container">
-    <div class="logo">🌊 ХВИЛЯ</div>
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#player">Слухати</a></li>
-      <li><a href="#about">Про нас</a></li>
-      <li><a href="#contact">Контакти</a></li>
-      <li><a href="https://t.me/wavevictory" target="_blank">Telegram</a></li>
-    </ul>
-  </div>
-</nav>
+    <div class="app-container">
+        
+        <div class="card area-main-player" id="playerCard">
+            
+            <canvas id="visualizer"></canvas>
 
-<section class="hero">
-  <div class="hero-content">
-    <h1>ХВИЛЯ ПЕРЕМОГИ</h1>
-    <p>Українське радіо нового покоління 🇺🇦</p>
-  </div>
-</section>
+            <div class="top-info" style="position: absolute; top: 24px; left: 24px;">
+                <h1>Зараз в ефірі</h1>
+                <div style="font-size: 18px; font-weight: 600; color: #fff; max-width: 80%;">Українська Музика</div>
+            </div>
+            
+            <div class="player-wrapper">
+                <div class="play-btn-circle" id="playBtn">
+                    <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="icon-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                </div>
+            </div>
+            <div class="bottom-controls">
+                <span style="font-size: 12px; color: var(--text-sec);">ГУЧНІСТЬ</span>
+                <input type="range" id="volume" min="0" max="1" step="0.1" value="0.8" style="accent-color: var(--text-main); width: 80px;">
+            </div>
+        </div>
 
-<section id="player" class="player-section">
-  <div class="player-card">
-    <div class="visualizer-container">
-      <canvas id="audioVisualizer"></canvas>
+        <div class="card area-status">
+            <h1>Статус</h1>
+            <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+                <div class="live-badge">
+                    <div class="dot"></div>
+                    ON AIR
+                </div>
+                <p style="margin-top: 15px;">24/7 Без реклами</p>
+                <div class="eq-bars" style="margin-top: 15px;">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card area-support">
+            <a href="https://bit.ly/3APXqaS" target="_blank" class="support-link">
+                <div class="icon-box">☕</div>
+                <div>
+                    <h2 style="color: #000;">Підтримати Радіо</h2>
+                    <p style="color: #333; font-weight: 600;">На каву та ЗСУ 🇺🇦</p>
+                </div>
+                <div style="align-self: flex-end;">↗</div>
+            </a>
+        </div>
+
+        <div class="card area-social">
+            <a href="https://t.me/wavevictory" target="_blank" class="social-link">
+                <div>
+                    <h1>Спільнота</h1>
+                    <h2>Telegram</h2>
+                </div>
+                <div class="tg-icon">
+                    <svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.28 7.27-6.58c.28-.25-.06-.39-.42-.16l-9 5.67-4.32-1.36c-.94-.29-.96-.94.2-1.39l16.85-6.5c.78-.29 1.46.18 1.21 1.49l-2.86 13.5c-.21.96-1.12 1.18-2.26.54l-6.22-4.6-3 2.89c-.33.33-.61.61-1.25.61l.19-5.46z"/></svg>
+                </div>
+            </a>
+        </div>
+
+        <div class="card area-info">
+            <h1>Про нас</h1>
+            <p>"Хвиля Перемоги" — це музичний фронт. Тільки найкраще, тільки українське.</p>
+            <p style="margin-top: auto; font-size: 12px; opacity: 0.5;">Пльзень, Чехія</p>
+        </div>
+
+        <div class="card area-ticker">
+            <div class="ticker-content">
+                <span>СЛАВА УКРАЇНІ! • ГЕРОЯМ СЛАВА! • ВСЕ БУДЕ УКРАЇНА • ХВИЛЯ ПЕРЕМОГИ • ДЯКУЄМО ЗА ПІДТРИМКУ • МИ ПЕРЕМОЖЕМО • СЛУХАЙ УКРАЇНСЬКЕ •</span>
+            </div>
+        </div>
+
     </div>
-    
-    <div class="player-controls">
-      <button class="play-btn" id="playBtn" onclick="togglePlay()"></button>
-      <div class="volume-control">
-        <input type="range" id="volume" min="0" max="100" value="80" oninput="changeVolume(this.value)">
-      </div>
-    </div>
-    
-    <div class="now-playing">
-      <h3>Зараз в ефірі</h3>
-      <div class="track-info" id="trackInfo">Ukrainian Music Non-Stop</div>
-    </div>
-  </div>
-</section>
 
-<section id="about" class="content-section">
-  <h2 class="section-title">Про Радіо</h2>
-  <div class="feature-grid">
-    <div class="feature-card">
-      <div class="feature-icon">🎵</div>
-      <h3>Сучасна Музика</h3>
-      <p>Найкращі українські треки та світові хіти без зупинки</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🚀</div>
-      <h3>Без Реклами</h3>
-      <p>Чиста музика 24/7 без переривань на рекламу</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🇺🇦</div>
-      <h3>Українське</h3>
-      <p>Підтримуємо вітчизняних виконавців та промоутуємо українську культуру</p>
-    </div>
-  </div>
-</section>
+    <audio id="audio-stream" crossorigin="anonymous" preload="none">
+        <source src="https://stream.zeno.fm/9cu5cnlqnlptv" type="audio/mpeg">
+    </audio>
 
-<section class="support-section">
-  <a href="https://bit.ly/3APXqaS" target="_blank" class="support-btn">☕ Підтримати Радіо</a>
-</section>
+    <script>
+        // --- LOGIC ---
+        const playBtn = document.getElementById('playBtn');
+        const iconPlay = document.getElementById('icon-play');
+        const iconPause = document.getElementById('icon-pause');
+        const audio = document.getElementById('audio-stream');
+        const volumeSlider = document.getElementById('volume');
+        const playerCard = document.getElementById('playerCard');
+        
+        let isPlaying = false;
+        let audioContext, analyser, source, dataArray, bufferLength;
+        let canvas, ctx;
+        let animationId;
 
-<section id="contact" class="content-section">
-  <h2 class="section-title">Контакти</h2>
-  <div class="feature-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
-    <p style="font-size: 1.2rem;">📧 wavevictory@protonmail.com</p>
-    <p style="margin-top: 1rem;">💬 <a href="https://t.me/wavevictory" target="_blank" style="color: var(--neon-blue);">Telegram канал</a></p>
-  </div>
-</section>
+        // Init Audio Context for Visualization
+        function initAudio() {
+            if (audioContext) return;
+            
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioContext = new AudioContext();
+                analyser = audioContext.createAnalyser();
+                
+                // Connect audio element to analyser
+                source = audioContext.createMediaElementSource(audio);
+                source.connect(analyser);
+                analyser.connect(audioContext.destination);
+                
+                // Config
+                analyser.fftSize = 1024;
+                analyser.smoothingTimeConstant = 0.5; 
+                bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+                
+                // Init Canvas
+                canvas = document.getElementById('visualizer');
+                ctx = canvas.getContext('2d');
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+                
+                drawVisualizer();
+            } catch (e) {
+                console.log("Web Audio API not supported or blocked", e);
+            }
+        }
 
-<footer>
-  <div class="footer-content">
-    <div class="footer-links">
-      <a href="#player">Слухати</a>
-      <a href="#about">Про нас</a>
-      <a href="#contact">Контакти</a>
-      <a href="https://t.me/wavevictory" target="_blank">Telegram</a>
-    </div>
-    <p class="copyright">© 2024 Хвиля Перемоги. Слава Україні! 🇺🇦</p>
-  </div>
-</footer>
+        function resizeCanvas() {
+            // High DPI scaling (canvas.width and canvas.height for drawing fidelity)
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.parentElement.getBoundingClientRect(); 
+            // Використовуємо розмір батьківського елемента для правильного масштабу
+            canvas.width = rect.width * dpr; 
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            
+            // Забезпечуємо, що візуалізатор завжди відображається коректно
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+        }
 
-<audio id="radioStream" crossorigin="anonymous" preload="none">
-  <source src="https://stream.zeno.fm/9cu5cnlqnlptv" type="audio/mpeg">
-</audio>
+        function drawVisualizer() {
+            if (!isPlaying) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+            
+            animationId = requestAnimationFrame(drawVisualizer);
+            analyser.getByteFrequencyData(dataArray);
+            
+            // Розміри без DPI
+            const width = canvas.offsetWidth;
+            const height = canvas.offsetHeight;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = 90; 
 
-<script>
-const audio = document.getElementById('radioStream');
-const playBtn = document.getElementById('playBtn');
-const canvas = document.getElementById('audioVisualizer');
-const ctx = canvas.getContext('2d');
-const volumeSlider = document.getElementById('volume');
+            ctx.clearRect(0, 0, width, height);
+            
+            // 1. Circular Waveform (Blue/Yellow Gradient)
+            ctx.beginPath();
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, '#2E5CFF');
+            gradient.addColorStop(0.5, '#FFD600');
+            gradient.addColorStop(1, '#2E5CFF');
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 3;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(46, 92, 255, 0.7)';
 
-let audioContext;
-let analyser;
-let source;
-let dataArray;
-let isPlaying = false;
-let animationTime = 0;
+            for (let i = 0; i < bufferLength; i++) {
+                const angle = (i / bufferLength) * Math.PI * 2;
+                const boost = dataArray[i] / 255;
+                const r = radius + (boost * 80); 
+                
+                const x = centerX + Math.cos(angle) * r;
+                const y = centerY + Math.sin(angle) * r;
+                
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.stroke();
 
-canvas.width = canvas.offsetWidth;
-canvas.height = canvas.offsetHeight;
+            // 2. Inner Glow (Yellow) based on bass
+            const bass = dataArray[10] / 255;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius - 10, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 214, 0, ${bass * 1.0})`; 
+            ctx.shadowBlur = 25; 
+            ctx.shadowColor = '#FFD600';
+            ctx.fill();
+            
+            ctx.shadowBlur = 0; 
+        }
 
-window.addEventListener('resize', () => {
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
-});
+        // Play/Pause Toggle
+        async function togglePlay() {
+            if (!audioContext) initAudio();
+            
+            // Resume context if suspended (browser policy)
+            if (audioContext && audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
 
-async function togglePlay() {
-  try {
-    if (!audioContext) {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      analyser = audioContext.createAnalyser();
-      source = audioContext.createMediaElementSource(audio);
-      
-      analyser.fftSize = 128;
-      analyser.smoothingTimeConstant = 0.85;
-      
-      source.connect(analyser);
-      analyser.connect(audioContext.destination);
-      
-      dataArray = new Uint8Array(analyser.frequencyBinCount);
-    }
+            if (audio.paused) {
+                try {
+                    // Mobile safari unlock logic
+                    audio.load(); 
+                    await audio.play();
+                    isPlaying = true;
+                    playerCard.classList.add('is-playing');
+                    iconPlay.style.display = 'none';
+                    iconPause.style.display = 'block';
+                    drawVisualizer();
+                } catch (err) {
+                    console.error("Playback failed", err);
+                    alert("Натисніть ще раз для запуску");
+                }
+            } else {
+                audio.pause();
+                isPlaying = false;
+                playerCard.classList.remove('is-playing');
+                iconPlay.style.display = 'block';
+                iconPause.style.display = 'none';
+                cancelAnimationFrame(animationId);
+                // Clear canvas
+                if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
 
-    if (isPlaying) {
-      audio.pause();
-      isPlaying = false;
-      playBtn.classList.remove('playing');
-    } else {
-      // Загружаємо аудіо перед відтворенням
-      audio.load();
-      
-      // Чекаємо поки аудіо готове
-      await new Promise((resolve) => {
-        audio.addEventListener('canplay', resolve, { once: true });
-      });
-      
-      await audio.play();
-      isPlaying = true;
-      playBtn.classList.add('playing');
-      visualize();
-    }
-  } catch (error) {
-    console.error('Playback error:', error);
-    isPlaying = false;
-    playBtn.classList.remove('playing');
-    
-    if (error.name === 'NotAllowedError') {
-      alert('Браузер блокує автовідтворення. Натисніть кнопку ще раз.');
-    } else if (error.name === 'NotSupportedError') {
-      alert('Формат аудіо не підтримується вашим браузером.');
-    } else {
-      alert('Помилка відтворення. Перевірте з\'єднання з інтернетом.');
-    }
-  }
-}
+        playBtn.addEventListener('click', togglePlay);
+        
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+        });
 
-function visualize() {
-  if (!isPlaying) return;
-  
-  requestAnimationFrame(visualize);
-  analyser.getByteFrequencyData(dataArray);
-  
-  animationTime += 0.05;
-  
-  // Очищення canvas
-  ctx.fillStyle = 'rgba(10, 14, 39, 0.2)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  const points = 100;
-  const wavePoints = [];
-  
-  // Створюємо точки хвилі з музичними даними
-  for (let i = 0; i <= points; i++) {
-    const x = (canvas.width / points) * i;
-    const dataIndex = Math.floor((i / points) * dataArray.length);
-    const amplitude = (dataArray[dataIndex] / 255) * 40;
-    
-    // Синусоїдальна хвиля з випадковим коливанням
-    const wave1 = Math.sin((i / points) * Math.PI * 2 + animationTime) * 15;
-    const wave2 = Math.sin((i / points) * Math.PI * 4 + animationTime * 1.5) * 8;
-    const wave3 = Math.sin((i / points) * Math.PI * 6 - animationTime * 0.8) * 5;
-    
-    const y = (canvas.height / 2) + wave1 + wave2 + wave3 + amplitude;
-    wavePoints.push({ x, y });
-  }
-  
-  // Малюємо синю частину (верх)
-  const blueGradient = ctx.createLinearGradient(0, 0, 0, canvas.height / 2);
-  blueGradient.addColorStop(0, '#00d4ff');
-  blueGradient.addColorStop(0.6, '#0057b7');
-  blueGradient.addColorStop(1, '#003d82');
-  
-  ctx.fillStyle = blueGradient;
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  
-  // Плавна крива через всі точки (верхня частина)
-  for (let i = 0; i < wavePoints.length; i++) {
-    if (i === 0) {
-      ctx.lineTo(wavePoints[i].x, wavePoints[i].y);
-    } else {
-      const xc = (wavePoints[i].x + wavePoints[i - 1].x) / 2;
-      const yc = (wavePoints[i].y + wavePoints[i - 1].y) / 2;
-      ctx.quadraticCurveTo(wavePoints[i - 1].x, wavePoints[i - 1].y, xc, yc);
-    }
-  }
-  
-  ctx.lineTo(canvas.width, 0);
-  ctx.closePath();
-  ctx.fill();
-  
-  // Малюємо жовту частину (низ)
-  const yellowGradient = ctx.createLinearGradient(0, canvas.height / 2, 0, canvas.height);
-  yellowGradient.addColorStop(0, '#ffd700');
-  yellowGradient.addColorStop(0.4, '#ffed4e');
-  yellowGradient.addColorStop(1, '#ff9500');
-  
-  ctx.fillStyle = yellowGradient;
-  ctx.beginPath();
-  
-  // Починаємо з останньої точки хвилі
-  ctx.moveTo(canvas.width, canvas.height);
-  ctx.lineTo(0, canvas.height);
-  
-  // Плавна крива через всі точки (нижня частина)
-  for (let i = 0; i < wavePoints.length; i++) {
-    if (i === 0) {
-      ctx.lineTo(wavePoints[i].x, wavePoints[i].y);
-    } else {
-      const xc = (wavePoints[i].x + wavePoints[i - 1].x) / 2;
-      const yc = (wavePoints[i].y + wavePoints[i - 1].y) / 2;
-      ctx.quadraticCurveTo(wavePoints[i - 1].x, wavePoints[i - 1].y, xc, yc);
-    }
-  }
-  
-  ctx.closePath();
-  ctx.fill();
-  
-  // Світловий ефект на лінії розділення
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-  ctx.lineWidth = 3;
-  ctx.shadowBlur = 15;
-  ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
-  ctx.beginPath();
-  
-  for (let i = 0; i < wavePoints.length; i++) {
-    if (i === 0) {
-      ctx.moveTo(wavePoints[i].x, wavePoints[i].y);
-    } else {
-      const xc = (wavePoints[i].x + wavePoints[i - 1].x) / 2;
-      const yc = (wavePoints[i].y + wavePoints[i - 1].y) / 2;
-      ctx.quadraticCurveTo(wavePoints[i - 1].x, wavePoints[i - 1].y, xc, yc);
-    }
-  }
-  
-  ctx.stroke();
-  ctx.shadowBlur = 0;
-}
+        // Auto-reconnect on stream drop
+        audio.addEventListener('error', () => {
+            console.log("Stream dropped, reconnecting...");
+            setTimeout(() => {
+                if(isPlaying) {
+                    audio.load();
+                    audio.play();
+                }
+            }, 3000);
+        });
 
-function changeVolume(value) {
-  audio.volume = value / 100;
-}
-
-function toggleMenu() {
-  document.getElementById('navLinks').classList.toggle('active');
-}
-
-audio.volume = 0.8;
-
-// Додаємо обробник для resumе аудіо контексту
-document.addEventListener('click', () => {
-  if (audioContext && audioContext.state === 'suspended') {
-    audioContext.resume();
-  }
-}, { once: true });
-
-audio.addEventListener('error', (e) => {
-  console.error('Audio error:', e);
-  isPlaying = false;
-  playBtn.classList.remove('playing');
-  alert('Помилка завантаження потоку. Перевірте з\'єднання.');
-});
-
-// Автоматичне відновлення при розриві з'єднання
-audio.addEventListener('stalled', () => {
-  console.log('Stream stalled, attempting reload...');
-  if (isPlaying) {
-    audio.load();
-    audio.play().catch(err => console.error('Reload failed:', err));
-  }
-});
-</script>
+    </script>
 </body>
 </html>
